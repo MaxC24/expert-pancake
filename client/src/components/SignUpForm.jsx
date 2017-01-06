@@ -4,11 +4,12 @@ import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
+
 const SignUpForm = ({
 	onSubmit,
 	onChange,
 	errors,
-	users
+	user
 })  => (
 	<Card className="container">
 		<form action="/" onSubmit={onSubmit}>

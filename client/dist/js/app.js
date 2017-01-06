@@ -43190,7 +43190,7 @@
 		var onSubmit = _ref.onSubmit,
 		    onChange = _ref.onChange,
 		    errors = _ref.errors,
-		    users = _ref.users;
+		    user = _ref.user;
 		return _react2.default.createElement(
 			_Card.Card,
 			{ className: 'container' },
