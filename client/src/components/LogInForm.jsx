@@ -47,6 +47,7 @@ const LoginForm = ({
   </Card>
 );
 
+console.log(PropTypes);
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
