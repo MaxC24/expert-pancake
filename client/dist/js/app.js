@@ -43156,7 +43156,7 @@
 		return SignUpPage;
 	}(_react2.default.Component);
 
-	exports.default = _SignUpForm2.default;
+	exports.default = SignUpPage;
 
 /***/ },
 /* 468 */
@@ -43202,7 +43202,7 @@
 					{ className: 'card-heading' },
 					'Sign Up'
 				),
-				erros.summary && _react2.default.createElement(
+				errors.summary && _react2.default.createElement(
 					'p',
 					{ className: 'error-message' },
 					errors.sumamry
@@ -43214,6 +43214,17 @@
 						floatingLabelText: 'Name',
 						name: 'name',
 						errorText: errors.name,
+						onChange: onChange,
+						value: user.name
+					})
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'field-line' },
+					_react2.default.createElement(_TextField2.default, {
+						floatingLabelText: 'Email',
+						name: 'email',
+						errorText: errors.email,
 						onChange: onChange,
 						value: user.name
 					})
