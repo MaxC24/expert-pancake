@@ -33,7 +33,7 @@ const SignUpForm = ({
 					name="email"
 					errorText={errors.email}
 					onChange={onChange}
-					value={user.name}
+					value={user.email}
 				/>
 			</div>
 

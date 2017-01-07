@@ -43226,7 +43226,7 @@
 						name: 'email',
 						errorText: errors.email,
 						onChange: onChange,
-						value: user.name
+						value: user.email
 					})
 				),
 				_react2.default.createElement(
