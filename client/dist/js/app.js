@@ -40949,6 +40949,9 @@
 	        } else {
 	          var errors = xhr.response.errors ? xhr.response.errors : {};
 	          errors.summary = xhr.response.message;
+	          _this2.setState({
+	            errors: errors
+	          });
 	        }
 	      });
 	      xhr.send(formData);
@@ -41073,7 +41076,6 @@
 	  );
 	};
 
-	console.log(_react.PropTypes);
 	LoginForm.propTypes = {
 	  onSubmit: _react.PropTypes.func.isRequired,
 	  onChange: _react.PropTypes.func.isRequired,
@@ -43181,13 +43183,13 @@
 						console.log('The form is valid');
 						//failure
 					} else {
-						var _errors = xhr.response.errors ? xhr.response.errors : {};
-						_errors.summary = xhr.response.message;
+						var errors = xhr.response.errors ? xhr.response.errors : {};
+						console.log('WTF', errors.email);
+						errors.summary = xhr.response.message;
+						_this2.setState({
+							errors: errors
+						});
 					}
-
-					_this2.setState({
-						errors: errors
-					});
 				});
 
 				xhr.send(formData);

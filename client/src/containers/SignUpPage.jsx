@@ -34,7 +34,7 @@ class SignUpPage extends React.Component {
 		const name = encodeURIComponent(this.state.user.name);
 		const email = encodeURIComponent(this.state.user.email);
 		const password = encodeURIComponent(this.state.user.password);
-		const formData = `name=${ name }&email=${email}&password=${password}`;
+		const formData = `name=${ name }&email=${ email }&password=${ password }`;
 
 		const xhr = new XMLHttpRequest();
 		xhr.open('post', '/auth/signup');
@@ -54,13 +54,14 @@ class SignUpPage extends React.Component {
 
 			} else { 
 				const errors = xhr.response.errors ? xhr.response.errors : {};
+				console.log('WTF', errors.email);
 				errors.summary = xhr.response.message;
+				this.setState({
+					errors
+				});
 			}
 
-			this.setState({
-				errors
-			});
-		})
+		});
 
 		xhr.send(formData);
 	}
