@@ -40926,11 +40926,35 @@
 	  _createClass(LoginPage, [{
 	    key: 'processForm',
 	    value: function processForm(event) {
+	      var _this2 = this;
 
 	      event.preventDefault();
 
-	      console.log('email:', this.state.user.email);
-	      console.log('password:', this.state.user.password);
+	      var email = encodeURIComponent(this.state.user.email);
+	      var password = encodeURIComponent(this.state.user.password);
+	      var formData = 'email=' + email + '&password=' + password;
+	      var xhr = new XMLHttpRequest();
+	      xhr.open('post', '/auth/login');
+	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	      xhr.responseType = 'json';
+	      xhr.addEventListener('load', function () {
+	        if (xhr.status === 200) {
+	          //success
+
+	          //change the component-container state
+	          _this2.setState({
+	            errors: {}
+	          });
+	          console.log('the form is valid');
+	        } else {
+	          var errors = xhr.response.errors ? xhr.response.errors : {};
+	          errors.summary = xhr.response.message;
+	          _this2.setState({
+	            errors: errors
+	          });
+	        }
+	      });
+	      xhr.send(formData);
 	    }
 	  }, {
 	    key: 'changeUser',
@@ -41052,7 +41076,6 @@
 	  );
 	};
 
-	console.log(_react.PropTypes);
 	LoginForm.propTypes = {
 	  onSubmit: _react.PropTypes.func.isRequired,
 	  onChange: _react.PropTypes.func.isRequired,
@@ -43135,11 +43158,41 @@
 		}, {
 			key: 'processForm',
 			value: function processForm(event) {
+				var _this2 = this;
+
 				event.preventDefault();
 
-				console.log('name', this.state.user.name);
-				console.log('email', this.state.user.email);
-				console.log('password', this.state.user.password);
+				var name = encodeURIComponent(this.state.user.name);
+				var email = encodeURIComponent(this.state.user.email);
+				var password = encodeURIComponent(this.state.user.password);
+				var formData = 'name=' + name + '&email=' + email + '&password=' + password;
+
+				var xhr = new XMLHttpRequest();
+				xhr.open('post', '/auth/signup');
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.responseType = 'json';
+				xhr.addEventListener('load', function () {
+					if (xhr.status === 200) {
+						//success
+
+						//change the component-container state
+						_this2.setState({
+							errors: {}
+						});
+
+						console.log('The form is valid');
+						//failure
+					} else {
+						var errors = xhr.response.errors ? xhr.response.errors : {};
+						console.log('WTF', errors.email);
+						errors.summary = xhr.response.message;
+						_this2.setState({
+							errors: errors
+						});
+					}
+				});
+
+				xhr.send(formData);
 			}
 		}, {
 			key: 'render',

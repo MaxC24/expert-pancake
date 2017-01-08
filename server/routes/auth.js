@@ -11,7 +11,7 @@ function validateSignUpForm(payload) {
 		isFormValid = false;
 		errors.email = 'Please provide a correct email address.';
 	}
-	 if(!payload || typeof payload.password !== string || payload.password.trim().length < 8) {
+	 if(!payload || typeof payload.password !== 'string' || payload.password.trim().length < 8) {
 	 	isFormValid = false;
 	 	errors.password = 'Password  must have at least 8 characters.';
 	 }
@@ -64,13 +64,13 @@ router.post('/signup', (req, res) => {
 		return res.status(400).json({
 			success: false,
 			message: validationResult.message,
-			errors: validationResult.erros
+			errors: validationResult.errors
 		});
 	}
 	return res.status(200).end();
 });
 
-router.post('/login', (req, res) => _{
+router.post('/login', (req, res) => {
 	const validationResult = validateLoginForm(req.body);
 	if(!validationResult.success) {
 		return res.status(400).json({
