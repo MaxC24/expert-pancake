@@ -70,7 +70,7 @@ router.post('/signup', (req, res) => {
 	return res.status(200).end();
 });
 
-router.post('/login', (req, res) => _{
+router.post('/login', (req, res) => {
 	const validationResult = validateLoginForm(req.body);
 	if(!validationResult.success) {
 		return res.status(400).json({
