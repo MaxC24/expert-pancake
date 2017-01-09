@@ -3,7 +3,7 @@ import HomePage from './components/HomePage.jsx';
 import DashboardPage from './components/DashboardPage.jsx';
 import LoginPage from './containers/LoginPage.jsx';
 import SignUpPage from './containers/SignUpPage.jsx';
-import Auth from './module/Auth';
+import Auth from './modules/Auth';
 
 const routes = {
 

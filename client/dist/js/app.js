@@ -34249,7 +34249,7 @@
 
 	var _SignUpPage2 = _interopRequireDefault(_SignUpPage);
 
-	var _Auth = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./module/Auth\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _Auth = __webpack_require__(469);
 
 	var _Auth2 = _interopRequireDefault(_Auth);
 
@@ -41025,6 +41025,7 @@
 	        onSubmit: this.processForm,
 	        onChange: this.changeUser,
 	        errors: this.state.errors,
+	        successMessage: this.state.successMessage,
 	        user: this.state.user
 	      });
 	    }
@@ -41066,6 +41067,7 @@
 	var LoginForm = function LoginForm(_ref) {
 	  var onSubmit = _ref.onSubmit,
 	      onChange = _ref.onChange,
+	      successMessage = _ref.successMessage,
 	      errors = _ref.errors,
 	      user = _ref.user;
 	  return _react2.default.createElement(
@@ -41078,6 +41080,11 @@
 	        'h2',
 	        { className: 'card-heading' },
 	        'Login'
+	      ),
+	      successMessage && _react2.default.createElement(
+	        'p',
+	        { className: 'success-message' },
+	        successMessage
 	      ),
 	      errors.summary && _react2.default.createElement(
 	        'p',
