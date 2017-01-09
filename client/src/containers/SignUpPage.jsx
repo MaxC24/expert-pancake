@@ -3,7 +3,7 @@ import SignUpForm from '../components/SignUpForm.jsx';
 
 class SignUpPage extends React.Component {
 
-	constructor(props) {
+	constructor(props, context) {
 		super(props);
 
 		this.state = {
@@ -49,12 +49,14 @@ class SignUpPage extends React.Component {
 					errors: {}
 				});
 
-				console.log('The form is valid'); 
-				//failure
+				localStorage.setItem('successMessage', xhr.response.message);
+				
+				this.context.router.replace('/login');
 
 			} else { 
+				//failure
 				const errors = xhr.response.errors ? xhr.response.errors : {};
-				console.log('WTF', errors.email);
+				
 				errors.summary = xhr.response.message;
 				this.setState({
 					errors

@@ -34300,6 +34300,10 @@
 
 	var _reactRouter = __webpack_require__(333);
 
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Base = function Base(_ref) {
@@ -34319,7 +34323,15 @@
 	          'REACT APP'
 	        )
 	      ),
-	      _react2.default.createElement(
+	      _Auth2.default.isUserAuthenticated() ? _react2.default.createElement(
+	        'div',
+	        { className: 'top-bar-right' },
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/logout' },
+	          'LOG OUT'
+	        )
+	      ) : _react2.default.createElement(
 	        'div',
 	        { className: 'top-bar-right' },
 	        _react2.default.createElement(
@@ -40914,6 +40926,10 @@
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40928,10 +40944,19 @@
 	  function LoginPage(props) {
 	    _classCallCheck(this, LoginPage);
 
-	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props, context));
+
+	    var storedMessage = localStorage.getItem('successMessage');
+	    var successMessage = '';
+
+	    if (storedMessage) {
+	      successMessage = storedMessage;
+	      localStorage.removeItem('successMessage');
+	    }
 
 	    _this.state = {
 	      errors: {},
+	      successMessage: successMessage,
 	      user: {
 	        email: '',
 	        password: ''
@@ -40959,14 +40984,20 @@
 	      xhr.responseType = 'json';
 	      xhr.addEventListener('load', function () {
 	        if (xhr.status === 200) {
-	          //success
+	          //SUCCESS
 
 	          //change the component-container state
 	          _this2.setState({
 	            errors: {}
 	          });
-	          console.log('the form is valid');
+
+	          //save the token
+	          _Auth2.default.authenticateUser(xhr.response.token);
+
+	          //change the current url to /
+	          _this2.context.router.replace('/');
 	        } else {
+	          //FAILURE
 	          var errors = xhr.response.errors ? xhr.response.errors : {};
 	          errors.summary = xhr.response.message;
 	          _this2.setState({
@@ -43146,7 +43177,7 @@
 	var SignUpPage = function (_React$Component) {
 		_inherits(SignUpPage, _React$Component);
 
-		function SignUpPage(props) {
+		function SignUpPage(props, context) {
 			_classCallCheck(this, SignUpPage);
 
 			var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props));
@@ -43200,11 +43231,13 @@
 							errors: {}
 						});
 
-						console.log('The form is valid');
-						//failure
+						localStorage.setItem('successMessage', xhr.response.message);
+
+						_this2.context.router.replace('/login');
 					} else {
+						//failure
 						var errors = xhr.response.errors ? xhr.response.errors : {};
-						console.log('WTF', errors.email);
+
 						errors.summary = xhr.response.message;
 						_this2.setState({
 							errors: errors
@@ -43341,6 +43374,52 @@
 	};
 
 	exports.default = SignUpForm;
+
+/***/ },
+/* 469 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Auth = function () {
+		function Auth() {
+			_classCallCheck(this, Auth);
+		}
+
+		_createClass(Auth, null, [{
+			key: 'authenticateUser',
+			value: function authenticateUser(token) {
+				localStorage.setItem('token', token);
+			}
+		}, {
+			key: 'isUserAuthenticated',
+			value: function isUserAuthenticated() {
+				return localStorage.getItem('token') !== null;
+			}
+		}, {
+			key: 'deauthenticateUser',
+			value: function deauthenticateUser() {
+				localStorage.removeItems('token');
+			}
+		}, {
+			key: 'getToken',
+			value: function getToken() {
+				return localStorage.getItem('token');
+			}
+		}]);
+
+		return Auth;
+	}();
+
+	exports.default = Auth;
 
 /***/ }
 /******/ ]);
