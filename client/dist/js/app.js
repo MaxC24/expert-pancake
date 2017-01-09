@@ -34237,6 +34237,10 @@
 
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 
+	var _DashboardPage = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/DashboardPage.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _DashboardPage2 = _interopRequireDefault(_DashboardPage);
+
 	var _LoginPage = __webpack_require__(452);
 
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
@@ -34245,6 +34249,10 @@
 
 	var _SignUpPage2 = _interopRequireDefault(_SignUpPage);
 
+	var _Auth = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./module/Auth\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var routes = {
@@ -34252,13 +34260,25 @@
 		component: _Base2.default,
 		childRoutes: [{
 			path: '/',
-			component: _HomePage2.default
+			getComponent: function getComponent(location, callback) {
+				if (_Auth2.default.isUserAuthenticated()) {
+					callback(null, _DashboardPage2.default);
+				} else {
+					callback(null, Homepage);
+				}
+			}
 		}, {
 			path: '/login',
 			component: _LoginPage2.default
 		}, {
 			path: '/signup',
 			component: _SignUpPage2.default
+		}, {
+			path: '/logout',
+			onEnter: function onEnter(nextState, replace) {
+				_Auth2.default.deauthenticateUser();
+				replace('/');
+			}
 		}]
 	};
 
