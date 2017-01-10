@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 
 const Dashboard = ({secretData}) => {
-	<Card className="container">
+	return (<Card className="container">
 		<CardTitle
 			title="Dashboard"
 			subtitle="you can see this page only if authenticated."
@@ -12,7 +12,7 @@ const Dashboard = ({secretData}) => {
 			style={{ fontSize: '16px', color:'green'}}>{secretData}
 			</CardText>
 		}
-	</Card>
+	</Card>)
 }
 
 export default Dashboard;

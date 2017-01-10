@@ -34346,6 +34346,7 @@
 	        )
 	      )
 	    ),
+	    '// ',
 	    children
 	  );
 	};
@@ -43425,7 +43426,7 @@
 		}, {
 			key: 'deauthenticateUser',
 			value: function deauthenticateUser() {
-				localStorage.removeItems('token');
+				localStorage.removeItem('token');
 			}
 		}, {
 			key: 'getToken',
@@ -43444,6 +43445,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -43467,13 +43472,13 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var DashboardPad = function (_React$Component) {
-		_inherits(DashboardPad, _React$Component);
+	var DashboardPage = function (_React$Component) {
+		_inherits(DashboardPage, _React$Component);
 
-		function DashboardPad(props) {
-			_classCallCheck(this, DashboardPad);
+		function DashboardPage(props) {
+			_classCallCheck(this, DashboardPage);
 
-			var _this = _possibleConstructorReturn(this, (DashboardPad.__proto__ || Object.getPrototypeOf(DashboardPad)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
 
 			_this.state = {
 				secretData: ''
@@ -43481,7 +43486,7 @@
 			return _this;
 		}
 
-		_createClass(DashboardPad, [{
+		_createClass(DashboardPage, [{
 			key: 'ComponentDidMount',
 			value: function ComponentDidMount() {
 				var _this2 = this;
@@ -43507,8 +43512,10 @@
 			}
 		}]);
 
-		return DashboardPad;
+		return DashboardPage;
 	}(_react2.default.Component);
+
+	exports.default = DashboardPage;
 
 /***/ },
 /* 471 */
@@ -43531,7 +43538,7 @@
 	var Dashboard = function Dashboard(_ref) {
 		var secretData = _ref.secretData;
 
-		_react2.default.createElement(
+		return _react2.default.createElement(
 			_Card.Card,
 			{ className: 'container' },
 			_react2.default.createElement(_Card.CardTitle, {

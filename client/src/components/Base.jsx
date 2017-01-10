@@ -22,7 +22,7 @@ const Base = ({ children }) => (
       )}
 
     </div>
-    { /*hello */}
+    // { /*hello */}
     { children }
 
   </div>

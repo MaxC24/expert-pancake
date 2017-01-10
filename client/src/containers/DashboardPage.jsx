@@ -2,7 +2,7 @@ import React from 'react';
 import Auth from '../modules/Auth';
 import Dashboard from '../components/Dashboard.jsx';
 
-class DashboardPad extends React.Component {
+class DashboardPage extends React.Component {
 	
 	constructor(props) {
 		super(props);
@@ -32,3 +32,5 @@ class DashboardPad extends React.Component {
 		return (<Dashboard secretData={this.state.secretData} />);
 	}
 }
+
+export default DashboardPage;

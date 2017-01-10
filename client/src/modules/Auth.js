@@ -9,7 +9,7 @@ class Auth {
 	}
 
 	static deauthenticateUser() {
-		localStorage.removeItems('token')
+		localStorage.removeItem('token')
 	}
 
 	static getToken() {
