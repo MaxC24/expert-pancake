@@ -5,7 +5,7 @@ import Auth from '../modules/Auth';
 
 class LoginPage extends React.Component {
 
-  constructor(props) {
+  constructor(props, context) {
     super(props, context);
 
     const storedMessage = localStorage.getItem('successMessage');
@@ -90,5 +90,9 @@ class LoginPage extends React.Component {
   }
 
 }
+
+LoginPage.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default LoginPage;

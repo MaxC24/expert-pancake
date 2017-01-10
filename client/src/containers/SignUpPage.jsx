@@ -4,8 +4,7 @@ import SignUpForm from '../components/SignUpForm.jsx';
 class SignUpPage extends React.Component {
 
 	constructor(props, context) {
-		super(props);
-
+		super(props, context);
 		this.state = {
 			errors: {},
 			user: {
@@ -20,6 +19,7 @@ class SignUpPage extends React.Component {
 	}
 
 	changeUser(event) {
+		console.log(this.context);
 		const field = event.target.name;
 		const user = this.state.user;
 		user[field] = event.target.value;
@@ -43,18 +43,20 @@ class SignUpPage extends React.Component {
 		xhr.addEventListener('load', () => {
 			if(xhr.status === 200) {
 				//success
-
+				console.log('post request succeded');
 				//change the component-container state
 				this.setState({
 					errors: {}
 				});
 
 				localStorage.setItem('successMessage', xhr.response.message);
-				
+
 				this.context.router.replace('/login');
 
 			} else { 
 				//failure
+				console.log('post request failed with this error: ', xhr.response.message);
+
 				const errors = xhr.response.errors ? xhr.response.errors : {};
 				
 				errors.summary = xhr.response.message;
@@ -79,6 +81,10 @@ class SignUpPage extends React.Component {
 		);
 	}
 }
+
+SignUpPage.contextTypes =  {
+	router: PropTypes.object.isRequired
+};
 
 export default SignUpPage;
 
