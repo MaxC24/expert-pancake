@@ -1,14 +1,24 @@
 import React, { PropTypes } from 'react';
 import LoginForm from '../components/LoginForm.jsx';
+import Auth from '../modules/Auth';
 
 
 class LoginPage extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
+
+    const storedMessage = localStorage.getItem('successMessage');
+    let successMessage = '';
+
+    if(storedMessage) {
+      successMessage = storedMessage;
+      localStorage.removeItem('successMessage');
+    }
 
     this.state = {
       errors: {},
+      successMessage,
       user: {
         email: '',
         password: ''
@@ -32,14 +42,21 @@ class LoginPage extends React.Component {
     xhr.responseType = 'json';
     xhr.addEventListener('load', () => {
       if(xhr.status === 200) {
-        //success
+        //SUCCESS
 
         //change the component-container state
         this.setState({
           errors: {}
         });
-        console.log('the form is valid');
+
+        //save the token
+        Auth.authenticateUser(xhr.response.token);
+
+        //change the current url to /
+        this.context.router.replace('/');
+
       } else {
+        //FAILURE
         const errors = xhr.response.errors ? xhr.response.errors : {};
         errors.summary = xhr.response.message; 
         this.setState({
@@ -66,11 +83,16 @@ class LoginPage extends React.Component {
         onSubmit={this.processForm}
         onChange={this.changeUser}
         errors={this.state.errors}
+        successMessage={this.state.successMessage}
         user={this.state.user}
       />
     );
   }
 
 }
+
+LoginPage.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default LoginPage;

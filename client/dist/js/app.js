@@ -34237,6 +34237,10 @@
 
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 
+	var _DashboardPage = __webpack_require__(470);
+
+	var _DashboardPage2 = _interopRequireDefault(_DashboardPage);
+
 	var _LoginPage = __webpack_require__(452);
 
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
@@ -34245,6 +34249,10 @@
 
 	var _SignUpPage2 = _interopRequireDefault(_SignUpPage);
 
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var routes = {
@@ -34252,13 +34260,25 @@
 		component: _Base2.default,
 		childRoutes: [{
 			path: '/',
-			component: _HomePage2.default
+			getComponent: function getComponent(location, callback) {
+				if (_Auth2.default.isUserAuthenticated()) {
+					callback(null, _DashboardPage2.default);
+				} else {
+					callback(null, _HomePage2.default);
+				}
+			}
 		}, {
 			path: '/login',
 			component: _LoginPage2.default
 		}, {
 			path: '/signup',
 			component: _SignUpPage2.default
+		}, {
+			path: '/logout',
+			onEnter: function onEnter(nextState, replace) {
+				_Auth2.default.deauthenticateUser();
+				replace('/');
+			}
 		}]
 	};
 
@@ -34280,6 +34300,10 @@
 
 	var _reactRouter = __webpack_require__(333);
 
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Base = function Base(_ref) {
@@ -34296,10 +34320,18 @@
 	        _react2.default.createElement(
 	          _reactRouter.IndexLink,
 	          { to: '/' },
-	          'REACT APP'
+	          'MY APP'
 	        )
 	      ),
-	      _react2.default.createElement(
+	      _Auth2.default.isUserAuthenticated() ? _react2.default.createElement(
+	        'div',
+	        { className: 'top-bar-right' },
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/logout' },
+	          'LOG OUT'
+	        )
+	      ) : _react2.default.createElement(
 	        'div',
 	        { className: 'top-bar-right' },
 	        _react2.default.createElement(
@@ -40894,6 +40926,10 @@
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40905,13 +40941,22 @@
 	var LoginPage = function (_React$Component) {
 	  _inherits(LoginPage, _React$Component);
 
-	  function LoginPage(props) {
+	  function LoginPage(props, context) {
 	    _classCallCheck(this, LoginPage);
 
-	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props, context));
+
+	    var storedMessage = localStorage.getItem('successMessage');
+	    var successMessage = '';
+
+	    if (storedMessage) {
+	      successMessage = storedMessage;
+	      localStorage.removeItem('successMessage');
+	    }
 
 	    _this.state = {
 	      errors: {},
+	      successMessage: successMessage,
 	      user: {
 	        email: '',
 	        password: ''
@@ -40939,14 +40984,20 @@
 	      xhr.responseType = 'json';
 	      xhr.addEventListener('load', function () {
 	        if (xhr.status === 200) {
-	          //success
+	          //SUCCESS
 
 	          //change the component-container state
 	          _this2.setState({
 	            errors: {}
 	          });
-	          console.log('the form is valid');
+
+	          //save the token
+	          _Auth2.default.authenticateUser(xhr.response.token);
+
+	          //change the current url to /
+	          _this2.context.router.replace('/');
 	        } else {
+	          //FAILURE
 	          var errors = xhr.response.errors ? xhr.response.errors : {};
 	          errors.summary = xhr.response.message;
 	          _this2.setState({
@@ -40974,6 +41025,7 @@
 	        onSubmit: this.processForm,
 	        onChange: this.changeUser,
 	        errors: this.state.errors,
+	        successMessage: this.state.successMessage,
 	        user: this.state.user
 	      });
 	    }
@@ -40981,6 +41033,10 @@
 
 	  return LoginPage;
 	}(_react2.default.Component);
+
+	LoginPage.contextTypes = {
+	  router: _react.PropTypes.object.isRequired
+	};
 
 	exports.default = LoginPage;
 
@@ -41015,6 +41071,7 @@
 	var LoginForm = function LoginForm(_ref) {
 	  var onSubmit = _ref.onSubmit,
 	      onChange = _ref.onChange,
+	      successMessage = _ref.successMessage,
 	      errors = _ref.errors,
 	      user = _ref.user;
 	  return _react2.default.createElement(
@@ -41027,6 +41084,11 @@
 	        'h2',
 	        { className: 'card-heading' },
 	        'Login'
+	      ),
+	      successMessage && _react2.default.createElement(
+	        'p',
+	        { className: 'success-message' },
+	        successMessage
 	      ),
 	      errors.summary && _react2.default.createElement(
 	        'p',
@@ -43126,10 +43188,10 @@
 	var SignUpPage = function (_React$Component) {
 		_inherits(SignUpPage, _React$Component);
 
-		function SignUpPage(props) {
+		function SignUpPage(props, context) {
 			_classCallCheck(this, SignUpPage);
 
-			var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props, context));
 
 			_this.state = {
 				errors: {},
@@ -43148,6 +43210,7 @@
 		_createClass(SignUpPage, [{
 			key: 'changeUser',
 			value: function changeUser(event) {
+				console.log(this.context);
 				var field = event.target.name;
 				var user = this.state.user;
 				user[field] = event.target.value;
@@ -43174,17 +43237,21 @@
 				xhr.addEventListener('load', function () {
 					if (xhr.status === 200) {
 						//success
-
+						console.log('post request succeded');
 						//change the component-container state
 						_this2.setState({
 							errors: {}
 						});
 
-						console.log('The form is valid');
-						//failure
+						localStorage.setItem('successMessage', xhr.response.message);
+
+						_this2.context.router.replace('/login');
 					} else {
+						//failure
+						console.log('post request failed with this error: ', xhr.response.message);
+
 						var errors = xhr.response.errors ? xhr.response.errors : {};
-						console.log('WTF', errors.email);
+
 						errors.summary = xhr.response.message;
 						_this2.setState({
 							errors: errors
@@ -43208,6 +43275,10 @@
 
 		return SignUpPage;
 	}(_react2.default.Component);
+
+	SignUpPage.contextTypes = {
+		router: _react.PropTypes.object.isRequired
+	};
 
 	exports.default = SignUpPage;
 
@@ -43321,6 +43392,168 @@
 	};
 
 	exports.default = SignUpForm;
+
+/***/ },
+/* 469 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Auth = function () {
+		function Auth() {
+			_classCallCheck(this, Auth);
+		}
+
+		_createClass(Auth, null, [{
+			key: 'authenticateUser',
+			value: function authenticateUser(token) {
+				localStorage.setItem('token', token);
+			}
+		}, {
+			key: 'isUserAuthenticated',
+			value: function isUserAuthenticated() {
+				return localStorage.getItem('token') !== null;
+			}
+		}, {
+			key: 'deauthenticateUser',
+			value: function deauthenticateUser() {
+				localStorage.removeItem('token');
+			}
+		}, {
+			key: 'getToken',
+			value: function getToken() {
+				return localStorage.getItem('token');
+			}
+		}]);
+
+		return Auth;
+	}();
+
+	exports.default = Auth;
+
+/***/ },
+/* 470 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(469);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _Dashboard = __webpack_require__(471);
+
+	var _Dashboard2 = _interopRequireDefault(_Dashboard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DashboardPage = function (_React$Component) {
+		_inherits(DashboardPage, _React$Component);
+
+		function DashboardPage(props) {
+			_classCallCheck(this, DashboardPage);
+
+			var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
+
+			_this.state = {
+				secretData: ''
+			};
+			return _this;
+		}
+
+		_createClass(DashboardPage, [{
+			key: 'ComponentDidMount',
+			value: function ComponentDidMount() {
+				var _this2 = this;
+
+				var xhr = new XHMLHttpRequest();
+				xhr.open('get', '/api/dashboard');
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+				xhr.responseType = 'json';
+				xhr.addEventListener('load', function () {
+					if (xhr.status === 200) {
+						_this2.setState({
+							secretData: xhr.response.message
+						});
+					}
+				});
+				xhr.send();
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(_Dashboard2.default, { secretData: this.state.secretData });
+			}
+		}]);
+
+		return DashboardPage;
+	}(_react2.default.Component);
+
+	exports.default = DashboardPage;
+
+/***/ },
+/* 471 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Card = __webpack_require__(390);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Dashboard = function Dashboard(_ref) {
+		var secretData = _ref.secretData;
+
+		return _react2.default.createElement(
+			_Card.Card,
+			{ className: 'container' },
+			_react2.default.createElement(_Card.CardTitle, {
+				title: 'Dashboard',
+				subtitle: 'you can see this page only if authenticated.'
+			}),
+			secretData && _react2.default.createElement(
+				_Card.CardText,
+				{
+					style: { fontSize: '16px', color: 'green' } },
+				secretData
+			)
+		);
+	};
+
+	exports.default = Dashboard;
 
 /***/ }
 /******/ ]);
