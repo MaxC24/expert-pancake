@@ -34320,7 +34320,7 @@
 	        _react2.default.createElement(
 	          _reactRouter.IndexLink,
 	          { to: '/' },
-	          'REACT APP'
+	          'MY APP'
 	        )
 	      ),
 	      _Auth2.default.isUserAuthenticated() ? _react2.default.createElement(
@@ -34346,7 +34346,6 @@
 	        )
 	      )
 	    ),
-	    '// ',
 	    children
 	  );
 	};
