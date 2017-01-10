@@ -34378,7 +34378,7 @@
 		return _react2.default.createElement(
 			_Card.Card,
 			{ className: 'container' },
-			_react2.default.createElement(_Card.CardTitle, { title: 'React Application', subtitle: 'This is the HomePage' })
+			_react2.default.createElement(_Card.CardTitle, { title: 'MY APPLICATION', subtitle: 'This is the HomePage' })
 		);
 	};
 
@@ -43486,11 +43486,12 @@
 		}
 
 		_createClass(DashboardPage, [{
-			key: 'ComponentDidMount',
-			value: function ComponentDidMount() {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
 				var _this2 = this;
 
-				var xhr = new XHMLHttpRequest();
+				console.log('component did mount');
+				var xhr = new XMLHttpRequest();
 				xhr.open('get', '/api/dashboard');
 				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());

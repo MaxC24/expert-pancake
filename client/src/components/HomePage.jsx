@@ -4,7 +4,7 @@ import { Card, CardTitle } from 'material-ui/Card';
 
 const HomePage = () => (
 	<Card className="container">
-		<CardTitle title="React Application" subtitle="This is the HomePage" />
+		<CardTitle title="MY APPLICATION" subtitle="This is the HomePage" />
 	</Card>
 )
 

@@ -12,8 +12,9 @@ class DashboardPage extends React.Component {
 		};
 	}
 
-	ComponentDidMount() {
-		const xhr = new XHMLHttpRequest();
+	componentDidMount() {
+		console.log('component did mount')
+		const xhr = new XMLHttpRequest();
 		xhr.open('get', '/api/dashboard');
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
