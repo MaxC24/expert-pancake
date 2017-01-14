@@ -43,7 +43,7 @@ a:hover {
 }
 
 .container {
-  margin: 0 auto;
+  margin: 20vh auto;
   text-align: center;
   width: 700px;
 }
@@ -64,4 +64,8 @@ a:hover {
 .success-message {
   padding: 0 16px;
   color: green;
+}
+
+body {
+  background-image: url('/img/background1.jpg');
 }
