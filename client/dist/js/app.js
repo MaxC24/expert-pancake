@@ -40961,19 +40961,10 @@
 				referral: ''
 			};
 
-			_this.changeReferral = _this.changeReferral.bind(_this);
 			return _this;
 		}
 
 		_createClass(DashboardPage, [{
-			key: 'changeReferral',
-			value: function changeReferral(event) {
-				var referral = event.target.value;
-				this.setState({
-					referral: referral
-				});
-			}
-		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
 				var _this2 = this;
@@ -40996,10 +40987,7 @@
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(_Dashboard2.default, {
-					secretData: this.state.secretData,
-					onChange: this.changeReferral,
-					errors: this.state.errors
-				});
+					secretData: this.state.secretData });
 			}
 		}]);
 
@@ -41024,15 +41012,15 @@
 
 	var _Card = __webpack_require__(391);
 
-	var _TextField = __webpack_require__(459);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
 	var _Auth = __webpack_require__(389);
 
 	var _Auth2 = _interopRequireDefault(_Auth);
 
 	var _reactRouter = __webpack_require__(333);
+
+	var _ReferralsContainer = __webpack_require__(472);
+
+	var _ReferralsContainer2 = _interopRequireDefault(_ReferralsContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41061,14 +41049,9 @@
 					{
 						style: { fontSize: '20px' }
 					},
-					'Refer someone:'
-				),
-				_react2.default.createElement(_TextField2.default, {
-					floatingLabelText: 'Email',
-					errorText: errors.email,
-					onChange: onChange,
-					value: referral
-				})
+					'Refer someone:',
+					_react2.default.createElement(_ReferralsContainer2.default, null)
+				)
 			)
 		);
 	};
@@ -43561,6 +43544,114 @@
 	};
 
 	exports.default = SignUpForm;
+
+/***/ },
+/* 472 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ReferralsForm = __webpack_require__(474);
+
+	var _ReferralsForm2 = _interopRequireDefault(_ReferralsForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReferralsContainer = function (_React$Component) {
+	    _inherits(ReferralsContainer, _React$Component);
+
+	    function ReferralsContainer(props) {
+	        _classCallCheck(this, ReferralsContainer);
+
+	        var _this = _possibleConstructorReturn(this, (ReferralsContainer.__proto__ || Object.getPrototypeOf(ReferralsContainer)).call(this, props));
+
+	        _this.state = {
+	            referral: '',
+	            errors: {}
+	        };
+	        _this.changeReferral = _this.changeReferral.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(ReferralsContainer, [{
+	        key: 'changeReferral',
+	        value: function changeReferral(event) {
+	            var referral = event.target.value;
+	            this.setState({
+	                referral: referral
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_ReferralsForm2.default, {
+	                onChange: this.changeReferral,
+	                errors: this.state.errors,
+	                referral: this.state.referral
+	            });
+	        }
+	    }]);
+
+	    return ReferralsContainer;
+	}(_react2.default.Component);
+
+	exports.default = ReferralsContainer;
+
+/***/ },
+/* 473 */,
+/* 474 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _TextField = __webpack_require__(459);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ReferralsForm = function ReferralsForm(_ref) {
+	    var onChange = _ref.onChange,
+	        errors = _ref.errors,
+	        referral = _ref.referral;
+
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_TextField2.default, {
+	            floatingLabelText: 'Email',
+	            errorText: errors.email,
+	            onChange: onChange,
+	            value: referral
+	        })
+	    );
+	};
+
+	exports.default = ReferralsForm;
 
 /***/ }
 /******/ ]);

@@ -13,14 +13,6 @@ class DashboardPage extends React.Component {
 			referral: ''
 		};
 
-		this.changeReferral = this.changeReferral.bind(this);
-	}
-
-	changeReferral(event) {
-		const referral = event.target.value;
-		this.setState({
-			referral
-		})
 	}
 
 	componentWillMount() {
@@ -41,10 +33,7 @@ class DashboardPage extends React.Component {
 
 	render() {
 		return (<Dashboard 
-				secretData={this.state.secretData} 
-				onChange={this.changeReferral}
-				errors={this.state.errors}
-			/>);
+				secretData={this.state.secretData} />);
 	}
 }
 

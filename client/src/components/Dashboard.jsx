@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
-import TextField from 'material-ui/TextField';
 import Auth from '../modules/Auth';
 import { Link, IndexLink } from 'react-router';
+import ReferralsContainer from '../containers/ReferralsContainer.jsx';
 
 const Dashboard = ({secretData, errors, referral, onChange}) => {
 	return (
@@ -18,14 +18,9 @@ const Dashboard = ({secretData, errors, referral, onChange}) => {
 					style={{ fontSize: '20px'}}
 				>
 					Refer someone:
-					
+					<ReferralsContainer />
 				</CardText> 
-				<TextField
-					floatingLabelText="Email"
-					errorText={errors.email}
-					onChange={onChange}
-					value={referral}
-				/>
+				
 			</div> )
 		}
 	</Card>)
