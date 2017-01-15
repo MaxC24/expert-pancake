@@ -40956,17 +40956,28 @@
 			var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
 
 			_this.state = {
-				secretData: ''
+				secretData: '',
+				errors: {},
+				referral: ''
 			};
+
+			_this.changeReferral = _this.changeReferral.bind(_this);
 			return _this;
 		}
 
 		_createClass(DashboardPage, [{
+			key: 'changeReferral',
+			value: function changeReferral(event) {
+				var referral = event.target.value;
+				this.set.state({
+					referral: referral
+				});
+			}
+		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
 				var _this2 = this;
 
-				console.log('component did mount');
 				var xhr = new XMLHttpRequest();
 				xhr.open('get', '/api/dashboard');
 				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -40984,7 +40995,11 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement(_Dashboard2.default, { secretData: this.state.secretData });
+				return _react2.default.createElement(_Dashboard2.default, {
+					secretData: this.state.secretData,
+					onChange: this.changeReferral,
+					errors: this.state.errors
+				});
 			}
 		}]);
 
@@ -41009,6 +41024,10 @@
 
 	var _Card = __webpack_require__(391);
 
+	var _TextField = __webpack_require__(459);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
 	var _Auth = __webpack_require__(389);
 
 	var _Auth2 = _interopRequireDefault(_Auth);
@@ -41018,14 +41037,21 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Dashboard = function Dashboard(_ref) {
-		var secretData = _ref.secretData;
+		var secretData = _ref.secretData,
+		    errors = _ref.errors,
+		    referral = _ref.referral,
+		    onChange = _ref.onChange;
 
 		return _react2.default.createElement(
 			_Card.Card,
 			{ className: 'container' },
+			_react2.default.createElement(
+				_reactRouter.Link,
+				{ style: { marginLeft: "600px" }, to: '/logout' },
+				'LOG OUT'
+			),
 			_react2.default.createElement(_Card.CardTitle, {
-				title: 'Dashboard',
-				subtitle: 'you can see this page only if authenticated.'
+				title: "Hi " + secretData.name
 			}),
 			secretData && _react2.default.createElement(
 				'div',
@@ -41033,21 +41059,16 @@
 				_react2.default.createElement(
 					_Card.CardText,
 					{
-						style: { fontSize: '16px', color: 'green' } },
-					secretData.message
-				),
-				_react2.default.createElement(
-					_Card.CardText,
-					{
 						style: { fontSize: '20px' }
 					},
-					secretData.email
-				)
-			),
-			_Auth2.default.isUserAuthenticated() && _react2.default.createElement(
-				_reactRouter.Link,
-				{ to: '/logout' },
-				'LOG OUT'
+					'Refer someone:'
+				),
+				_react2.default.createElement(_TextField2.default, {
+					floatingLabelText: 'Email',
+					errorText: errors.email,
+					onChange: onChange,
+					value: referral
+				})
 			)
 		);
 	};

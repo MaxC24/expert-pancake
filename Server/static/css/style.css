@@ -44,6 +44,7 @@ a:hover {
 
 .container {
   margin: 20vh auto;
+  padding: 10px;
   text-align: center;
   width: 700px;
 }

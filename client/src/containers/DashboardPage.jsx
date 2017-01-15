@@ -8,12 +8,22 @@ class DashboardPage extends React.Component {
 		super(props);
 
 		this.state = {
-			secretData: ''
+			secretData: '',
+			errors: {},
+			referral: ''
 		};
+
+		this.changeReferral = this.changeReferral.bind(this);
+	}
+
+	changeReferral(event) {
+		const referral = event.target.value;
+		this.set.state({
+			referral
+		})
 	}
 
 	componentWillMount() {
-		console.log('component did mount')
 		const xhr = new XMLHttpRequest();
 		xhr.open('get', '/api/dashboard');
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -30,7 +40,11 @@ class DashboardPage extends React.Component {
 	}
 
 	render() {
-		return (<Dashboard secretData={this.state.secretData} />);
+		return (<Dashboard 
+				secretData={this.state.secretData} 
+				onChange={this.changeReferral}
+				errors={this.state.errors}
+			/>);
 	}
 }
 
