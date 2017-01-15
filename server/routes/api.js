@@ -27,7 +27,6 @@ router.put('/referrals', (req, res) => {
 		return referral.addToUser(req.user);
 	})
 	.then(user => {
-		console.log(user);
 		return User.populate(user, 'referrals');
 	})
 	.then(popUser => {

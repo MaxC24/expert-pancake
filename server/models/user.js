@@ -8,7 +8,10 @@ const UserSchema = new mongoose.Schema({
 	},
 	password: String,
 	name: String,
-	referrals: [{ type: mongoose.Schema.ObjectId, ref: 'Referral'}]
+	referrals: {
+		type: [{type: mongoose.Schema.ObjectId, ref: 'Referral'}],
+		default:[]
+	}
 });
 
 //method to compare the password in the request with the one in the db
