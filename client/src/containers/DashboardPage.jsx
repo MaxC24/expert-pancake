@@ -18,7 +18,7 @@ class DashboardPage extends React.Component {
 
 	changeReferral(event) {
 		const referral = event.target.value;
-		this.set.state({
+		this.setState({
 			referral
 		})
 	}

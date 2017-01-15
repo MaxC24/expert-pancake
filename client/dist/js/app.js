@@ -40969,7 +40969,7 @@
 			key: 'changeReferral',
 			value: function changeReferral(event) {
 				var referral = event.target.value;
-				this.set.state({
+				this.setState({
 					referral: referral
 				});
 			}
