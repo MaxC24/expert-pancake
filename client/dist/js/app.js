@@ -40962,8 +40962,8 @@
 		}
 
 		_createClass(DashboardPage, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
+			key: 'componentWillMount',
+			value: function componentWillMount() {
 				var _this2 = this;
 
 				console.log('component did mount');
@@ -40975,7 +40975,7 @@
 				xhr.addEventListener('load', function () {
 					if (xhr.status === 200) {
 						_this2.setState({
-							secretData: xhr.response.message
+							secretData: xhr.response
 						});
 					}
 				});
@@ -41028,10 +41028,21 @@
 				subtitle: 'you can see this page only if authenticated.'
 			}),
 			secretData && _react2.default.createElement(
-				_Card.CardText,
-				{
-					style: { fontSize: '16px', color: 'green' } },
-				secretData
+				'div',
+				null,
+				_react2.default.createElement(
+					_Card.CardText,
+					{
+						style: { fontSize: '16px', color: 'green' } },
+					secretData.message
+				),
+				_react2.default.createElement(
+					_Card.CardText,
+					{
+						style: { fontSize: '20px' }
+					},
+					secretData.email
+				)
 			),
 			_Auth2.default.isUserAuthenticated() && _react2.default.createElement(
 				_reactRouter.Link,

@@ -12,7 +12,7 @@ class DashboardPage extends React.Component {
 		};
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		console.log('component did mount')
 		const xhr = new XMLHttpRequest();
 		xhr.open('get', '/api/dashboard');
@@ -22,7 +22,7 @@ class DashboardPage extends React.Component {
 		xhr.addEventListener('load', () => {
 			if(xhr.status === 200) {
 				this.setState({
-					secretData: xhr.response.message
+					secretData: xhr.response
 				});
 			}
 		});

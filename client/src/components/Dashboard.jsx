@@ -10,9 +10,17 @@ const Dashboard = ({secretData}) => {
 			subtitle="you can see this page only if authenticated."
 		/>
 
-		{ secretData && <CardText 
-			style={{ fontSize: '16px', color:'green'}}>{secretData}
-			</CardText>
+		{ secretData && (
+			<div>
+				<CardText 
+					style={{ fontSize: '16px', color:'green'}}>{secretData.message}
+				</CardText>
+				<CardText
+					style={{ fontSize: '20px'}}
+				>
+					{ secretData.email }
+				</CardText> 
+			</div> )
 		}
 		{ 
 		  Auth.isUserAuthenticated() && ( <Link to="/logout">LOG OUT</Link> ) 
