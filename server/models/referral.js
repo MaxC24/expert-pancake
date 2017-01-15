@@ -8,7 +8,7 @@ const ReferralSchema = new mongoose.Schema({
     SignedUp: Boolean
 });
 
-ReferralSchema.methods.addToUser = (user) => {
+ReferralSchema.methods.addToUser = function(user) {
     user.referrals.push(this._id);
 	return user.save();
 }

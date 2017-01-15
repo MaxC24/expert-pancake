@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const Referral = require('mongoose').model('Referral');
+const User = require('mongoose').model('User');
 
 router.get('/dashboard', (req, res) => {
 	res.status(200).json({
@@ -11,10 +12,9 @@ router.get('/dashboard', (req, res) => {
 });
 
 router.put('/referrals', (req, res) => {
-	console.log('I am in referrals api point ', req.body);
 	Referral.findOne(req.body)
 	.then(referral => {
-		console.log(referral);
+		
 		if(!referral) {
 			return Referral.create(req.body);
 		} else {
@@ -24,10 +24,11 @@ router.put('/referrals', (req, res) => {
 		}
 	})
 	.then(referral => {
-			return referral.addToUser(req.user);
+		return referral.addToUser(req.user);
 	})
 	.then(user => {
-			return user.populate('referrals');
+		console.log(user);
+		return User.populate(user, 'referrals');
 	})
 	.then(popUser => {
 		res.status(200).json({
