@@ -11,21 +11,38 @@ router.get('/dashboard', (req, res) => {
 });
 
 router.put('/referrals', (req, res) => {
-
-	if(!req.user.referrals.include(req.body)){
-		req.user.referrals.push(req.body);
-		req.user.save()
-		.then(user =>{
-			res.status(200).json({
-				referrals: user.referrals
-			})
+	console.log('I am in referrals api point ', req.body);
+	Referral.findOne(req.body)
+	.then(referral => {
+		console.log(referral);
+		if(!referral) {
+			return Referral.create(req.body);
+		} else {
+			const error = new Error();
+			error.message = 'The user has been already referred';
+			return error;
+		}
+	})
+	.then(referral => {
+			
+			return referral.addToUser(req.user);
+	})
+	.then(user => {
+			return user.populate('referrals');
+	})
+	.then(popUser => {
+		res.status(200).json({
+			referrals: popUser.referrals
 		})
-		.catch( err=> {
-			console.log(err.message);
+	})
+	.catch(err => {
+		console.log('Error: ', err.message);
+		res.status(401).json({
+			errors: {
+				message: err.message
+			}
 		})
-	} else {
-		// send back error message
-	}
+	})
 })
 
 module.exports = router;
