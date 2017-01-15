@@ -20,11 +20,10 @@ router.put('/referrals', (req, res) => {
 		} else {
 			const error = new Error();
 			error.message = 'The user has been already referred';
-			return error;
+			throw error;
 		}
 	})
 	.then(referral => {
-			
 			return referral.addToUser(req.user);
 	})
 	.then(user => {

@@ -29,10 +29,10 @@ class ReferralsContainer extends React.Component {
         const email = encodeURIComponent(this.state.email);
         const formData = `email=${email}`;
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', '/api/referrals')
-        xhr.setRequestHeader('Content-type', 'application/x-form-urlencoded');
+        xhr.open('put', '/api/referrals')
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.reposndeType = 'json';
+        xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if(xhr.status === 200 ) {
                 this.setState({
@@ -43,12 +43,11 @@ class ReferralsContainer extends React.Component {
                 console.log(this.state.referrals);
             } else {
                 console.log('ERRRRROORRRRR', xhr.response.errors);
-                // this.setState({
-                //     errors: xhr.response.errors
-                // });
+                this.setState({
+                    errors: xhr.response.errors
+                });
             }
         })
-        console.log(formData);
         xhr.send(formData);
     }
 

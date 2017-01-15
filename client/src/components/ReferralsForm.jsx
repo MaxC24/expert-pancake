@@ -8,7 +8,7 @@ const ReferralsForm = ({onChange, errors, referral, onSubmit}) => {
         <form action="/" onSubmit={onSubmit}>
             <TextField
                 floatingLabelText="Email"
-                errorText={errors.email}
+                errorText={errors.message}
                 onChange={onChange}
                 value={referral}
             />

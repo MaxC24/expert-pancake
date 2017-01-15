@@ -43621,10 +43621,10 @@
 	            var email = encodeURIComponent(this.state.email);
 	            var formData = 'email=' + email;
 	            var xhr = new XMLHttpRequest();
-	            xhr.open('PUT', '/api/referrals');
-	            xhr.setRequestHeader('Content-type', 'application/x-form-urlencoded');
+	            xhr.open('put', '/api/referrals');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.reposndeType = 'json';
+	            xhr.responseType = 'json';
 	            xhr.addEventListener('load', function () {
 	                if (xhr.status === 200) {
 	                    _this2.setState({
@@ -43635,12 +43635,11 @@
 	                    console.log(_this2.state.referrals);
 	                } else {
 	                    console.log('ERRRRROORRRRR', xhr.response.errors);
-	                    // this.setState({
-	                    //     errors: xhr.response.errors
-	                    // });
+	                    _this2.setState({
+	                        errors: xhr.response.errors
+	                    });
 	                }
 	            });
-	            console.log(formData);
 	            xhr.send(formData);
 	        }
 	    }, {
@@ -43699,7 +43698,7 @@
 	            { action: '/', onSubmit: onSubmit },
 	            _react2.default.createElement(_TextField2.default, {
 	                floatingLabelText: 'Email',
-	                errorText: errors.email,
+	                errorText: errors.message,
 	                onChange: onChange,
 	                value: referral
 	            }),
