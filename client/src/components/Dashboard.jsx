@@ -12,7 +12,7 @@ const Dashboard = ({secretData, errors, referral, onChange}) => {
 			showMenuIconButton={false}
 			title={ secretData.name }
 		>
-			<Link className="logout-button" to="/board" >PRIZE BOARD</Link> 
+			<Link className="logout-button" to="/board" >TOP CHART</Link> 
 			<Link className="logout-button" to="/logout" >LOGOUT</Link> 
 		</ AppBar>
 

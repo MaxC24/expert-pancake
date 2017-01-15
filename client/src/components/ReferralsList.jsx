@@ -13,7 +13,7 @@ const ReferralList = ({referrals}) => {
                 { referrals.map((ref, i) => { 
                     return(<ListItem 
                             key={i}
-                            primaryText={ ref.email }
+                            primaryText={ref.email }
                             rightIcon={<CommunicationChatBubble />}
                         />) 
                     }) 

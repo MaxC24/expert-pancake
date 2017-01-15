@@ -41052,7 +41052,7 @@
 				_react2.default.createElement(
 					_reactRouter.Link,
 					{ className: 'logout-button', to: '/board' },
-					'PRIZE BOARD'
+					'TOP CHART'
 				),
 				_react2.default.createElement(
 					_reactRouter.Link,
@@ -45641,23 +45641,48 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _List = __webpack_require__(479);
+
+	var _List2 = _interopRequireDefault(_List);
+
+	var _Subheader = __webpack_require__(481);
+
+	var _Subheader2 = _interopRequireDefault(_Subheader);
+
+	var _reactRouter = __webpack_require__(333);
+
+	var _Card = __webpack_require__(391);
+
+	var _Card2 = _interopRequireDefault(_Card);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Board = function Board(_ref) {
 	    var users = _ref.users;
 
 	    return _react2.default.createElement(
-	        'ol',
-	        null,
-	        users.map(function (user, i) {
-	            return _react2.default.createElement(
-	                'li',
-	                { key: i },
-	                ' ',
-	                user,
-	                ' '
-	            );
-	        })
+	        _Card2.default,
+	        { style: { width: '460px', margin: "3vh 180px" } },
+	        _react2.default.createElement(
+	            _List2.default,
+	            { style: { width: '430px' } },
+	            _react2.default.createElement(
+	                _reactRouter.Link,
+	                { className: 'top-bar-right', to: '/' },
+	                'MY PROFILE'
+	            ),
+	            _react2.default.createElement(
+	                _Subheader2.default,
+	                null,
+	                'TOP CHART'
+	            ),
+	            users.map(function (user, i) {
+	                return _react2.default.createElement(_List.ListItem, {
+	                    key: i,
+	                    primaryText: i + 1 + " " + user
+	                });
+	            })
+	        )
 	    );
 	};
 
