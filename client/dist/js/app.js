@@ -40957,8 +40957,7 @@
 
 			_this.state = {
 				secretData: '',
-				errors: {},
-				referral: ''
+				errors: {}
 			};
 
 			return _this;
@@ -43573,6 +43572,10 @@
 
 	var _ReferralsForm2 = _interopRequireDefault(_ReferralsForm);
 
+	var _ReferralsList = __webpack_require__(478);
+
+	var _ReferralsList2 = _interopRequireDefault(_ReferralsList);
+
 	var _Auth = __webpack_require__(389);
 
 	var _Auth2 = _interopRequireDefault(_Auth);
@@ -43612,9 +43615,23 @@
 	            });
 	        }
 	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('get', '/api/referrals');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                _this2.setState(xhr.response);
+	            });
+	            xhr.send();
+	        }
+	    }, {
 	        key: 'processForm',
 	        value: function processForm(event) {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            event.preventDefault();
 
@@ -43627,15 +43644,14 @@
 	            xhr.responseType = 'json';
 	            xhr.addEventListener('load', function () {
 	                if (xhr.status === 200) {
-	                    _this2.setState({
+	                    _this3.setState({
 	                        errors: {},
 	                        email: '',
 	                        referrals: xhr.response.referrals
 	                    });
-	                    console.log(_this2.state.referrals);
 	                } else {
 	                    console.log('ERRRRROORRRRR', xhr.response.errors);
-	                    _this2.setState({
+	                    _this3.setState({
 	                        errors: xhr.response.errors
 	                    });
 	                }
@@ -43645,12 +43661,18 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(_ReferralsForm2.default, {
-	                onChange: this.changeReferral,
-	                errors: this.state.errors,
-	                referral: this.state.email,
-	                onSubmit: this.processForm
-	            });
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_ReferralsForm2.default, {
+	                    onChange: this.changeReferral,
+	                    errors: this.state.errors,
+	                    referral: this.state.email,
+	                    onSubmit: this.processForm
+	                }),
+	                this.state.referrals && _react2.default.createElement(_ReferralsList2.default, {
+	                    referrals: this.state.referrals })
+	            );
 	        }
 	    }]);
 
@@ -44154,6 +44176,46 @@
 	NavigationMenu.muiName = 'SvgIcon';
 
 	exports.default = NavigationMenu;
+
+/***/ },
+/* 478 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ReferralList = function ReferralList(_ref) {
+	    var referrals = _ref.referrals;
+
+	    console.log(referrals);
+	    return _react2.default.createElement(
+	        'ul',
+	        null,
+	        _react2.default.createElement(
+	            'li',
+	            null,
+	            'Hello'
+	        ),
+	        referrals.map(function (ref, i) {
+	            return _react2.default.createElement(
+	                'li',
+	                { key: i },
+	                ref.email
+	            );
+	        })
+	    );
+	};
+
+	exports.default = ReferralList;
 
 /***/ }
 /******/ ]);

@@ -9,8 +9,7 @@ class DashboardPage extends React.Component {
 
 		this.state = {
 			secretData: '',
-			errors: {},
-			referral: ''
+			errors: {}
 		};
 
 	}

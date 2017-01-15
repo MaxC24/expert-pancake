@@ -1,5 +1,6 @@
 import React from 'react';
 import ReferralsForm from '../components/ReferralsForm.jsx';
+import ReferralList from '../components/ReferralsList.jsx';
 import Auth from '../modules/Auth';
 
 class ReferralsContainer extends React.Component {
@@ -23,6 +24,17 @@ class ReferralsContainer extends React.Component {
 		})
 	}
 
+    componentWillMount() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/api/referrals');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', ()=> {
+            this.setState(xhr.response);
+        })
+        xhr.send();
+    }
+
     processForm(event) {
         event.preventDefault();
 
@@ -40,7 +52,6 @@ class ReferralsContainer extends React.Component {
                     email: '',
                     referrals: xhr.response.referrals
                 });
-                console.log(this.state.referrals);
             } else {
                 console.log('ERRRRROORRRRR', xhr.response.errors);
                 this.setState({
@@ -53,12 +64,16 @@ class ReferralsContainer extends React.Component {
 
     render() {
         return (
-            <ReferralsForm
-                onChange={this.changeReferral}
-				errors={this.state.errors}
-                referral={this.state.email}
-                onSubmit={this.processForm}
-            />
+            <div>
+                <ReferralsForm
+                    onChange={this.changeReferral}
+                    errors={this.state.errors}
+                    referral={this.state.email}
+                    onSubmit={this.processForm}
+                />
+                { this.state.referrals && <ReferralList
+                    referrals={this.state.referrals} /> }
+            </div>
         )
     }
 

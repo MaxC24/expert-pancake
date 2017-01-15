@@ -14,7 +14,6 @@ router.get('/dashboard', (req, res) => {
 router.put('/referrals', (req, res) => {
 	Referral.findOne(req.body)
 	.then(referral => {
-		
 		if(!referral) {
 			return Referral.create(req.body);
 		} else {
@@ -41,6 +40,19 @@ router.put('/referrals', (req, res) => {
 				message: err.message
 			}
 		})
+	})
+})
+
+router.get('/referrals', (req, res) => {
+	console.log('get referrals')
+	User.populate(req.user, 'referrals')
+	.then(popUser => {
+		return res.status(200).json({
+			referrals: popUser.referrals
+		});
+	})
+	.catch(err => {
+		console.log(err.message);
 	})
 })
 
