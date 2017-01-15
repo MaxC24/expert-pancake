@@ -70,3 +70,13 @@ a:hover {
 body {
   background-image: url('/img/background1.jpg');
 }
+
+/* User Dashboard */
+
+.userdash {
+  margin: 5vh auto;
+  padding: 10px;
+  text-align: center;
+  width: 70vw;
+  text-align: left;
+}

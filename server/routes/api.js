@@ -1,5 +1,6 @@
 const express = require('express');
 const router = new express.Router();
+const Referral = require('mongoose').model('Referral');
 
 router.get('/dashboard', (req, res) => {
 	res.status(200).json({
@@ -16,8 +17,6 @@ router.put('/referrals', (req, res) => {
 		req.user.save()
 		.then(user =>{
 			res.status(200).json({
-				email: user.email,
-				name: user.name,
 				referrals: user.referrals
 			})
 		})

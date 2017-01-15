@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
 	password: String,
 	name: String,
 	referrals: {
-		type: [String],
+		type: [mongoose.Types.ObjectId],
 		default: []
 	}
 });
