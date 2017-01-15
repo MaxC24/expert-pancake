@@ -41010,8 +41010,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Card = __webpack_require__(391);
-
 	var _Auth = __webpack_require__(389);
 
 	var _Auth2 = _interopRequireDefault(_Auth);
@@ -41021,6 +41019,12 @@
 	var _ReferralsContainer = __webpack_require__(472);
 
 	var _ReferralsContainer2 = _interopRequireDefault(_ReferralsContainer);
+
+	var _Card = __webpack_require__(391);
+
+	var _AppBar = __webpack_require__(475);
+
+	var _AppBar2 = _interopRequireDefault(_AppBar);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41032,15 +41036,19 @@
 
 		return _react2.default.createElement(
 			_Card.Card,
-			{ className: 'container' },
+			{ className: 'userdash' },
 			_react2.default.createElement(
-				_reactRouter.Link,
-				{ style: { marginLeft: "600px" }, to: '/logout' },
-				'LOG OUT'
+				_AppBar2.default,
+				{
+					showMenuIconButton: false,
+					title: secretData.name
+				},
+				_react2.default.createElement(
+					_reactRouter.Link,
+					{ style: { 'margin': '1.2em', 'color': 'white' }, to: '/logout' },
+					'LOGOUT'
+				)
 			),
-			_react2.default.createElement(_Card.CardTitle, {
-				title: "Hi " + secretData.name
-			}),
 			secretData && _react2.default.createElement(
 				'div',
 				null,
@@ -43565,6 +43573,10 @@
 
 	var _ReferralsForm2 = _interopRequireDefault(_ReferralsForm);
 
+	var _Auth = __webpack_require__(389);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43582,20 +43594,53 @@
 	        var _this = _possibleConstructorReturn(this, (ReferralsContainer.__proto__ || Object.getPrototypeOf(ReferralsContainer)).call(this, props));
 
 	        _this.state = {
-	            referral: '',
-	            errors: {}
+	            email: '',
+	            errors: {},
+	            referrals: []
 	        };
 	        _this.changeReferral = _this.changeReferral.bind(_this);
+	        _this.processForm = _this.processForm.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(ReferralsContainer, [{
 	        key: 'changeReferral',
 	        value: function changeReferral(event) {
-	            var referral = event.target.value;
+	            var email = event.target.value;
 	            this.setState({
-	                referral: referral
+	                email: email
 	            });
+	        }
+	    }, {
+	        key: 'processForm',
+	        value: function processForm(event) {
+	            var _this2 = this;
+
+	            event.preventDefault();
+
+	            var email = encodeURIComponent(this.state.email);
+	            var formData = 'email=' + email;
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('put', '/api/referrals');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        errors: {},
+	                        email: '',
+	                        referrals: xhr.response.referrals
+	                    });
+	                    console.log(_this2.state.referrals);
+	                } else {
+	                    console.log('ERRRRROORRRRR', xhr.response.errors);
+	                    _this2.setState({
+	                        errors: xhr.response.errors
+	                    });
+	                }
+	            });
+	            xhr.send(formData);
 	        }
 	    }, {
 	        key: 'render',
@@ -43603,7 +43648,8 @@
 	            return _react2.default.createElement(_ReferralsForm2.default, {
 	                onChange: this.changeReferral,
 	                errors: this.state.errors,
-	                referral: this.state.referral
+	                referral: this.state.email,
+	                onSubmit: this.processForm
 	            });
 	        }
 	    }]);
@@ -43632,26 +43678,482 @@
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
+	var _RaisedButton = __webpack_require__(457);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ReferralsForm = function ReferralsForm(_ref) {
 	    var onChange = _ref.onChange,
 	        errors = _ref.errors,
-	        referral = _ref.referral;
+	        referral = _ref.referral,
+	        onSubmit = _ref.onSubmit;
 
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_TextField2.default, {
-	            floatingLabelText: 'Email',
-	            errorText: errors.email,
-	            onChange: onChange,
-	            value: referral
-	        })
+	        _react2.default.createElement(
+	            'form',
+	            { action: '/', onSubmit: onSubmit },
+	            _react2.default.createElement(_TextField2.default, {
+	                floatingLabelText: 'Email',
+	                errorText: errors.message,
+	                onChange: onChange,
+	                value: referral
+	            }),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'button-line' },
+	                _react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Submit', primary: true })
+	            )
+	        )
 	    );
 	};
 
 	exports.default = ReferralsForm;
+
+/***/ },
+/* 475 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _AppBar = __webpack_require__(476);
+
+	var _AppBar2 = _interopRequireDefault(_AppBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _AppBar2.default;
+
+/***/ },
+/* 476 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends2 = __webpack_require__(393);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
+	var _keys = __webpack_require__(309);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	var _objectWithoutProperties2 = __webpack_require__(398);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _getPrototypeOf = __webpack_require__(317);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(315);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(320);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(324);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(325);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	exports.getStyles = getStyles;
+
+	var _simpleAssign = __webpack_require__(399);
+
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _IconButton = __webpack_require__(419);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	var _menu = __webpack_require__(477);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	var _Paper = __webpack_require__(400);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
+	var _propTypes = __webpack_require__(402);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _warning = __webpack_require__(306);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getStyles(props, context) {
+	  var _context$muiTheme = context.muiTheme,
+	      appBar = _context$muiTheme.appBar,
+	      iconButtonSize = _context$muiTheme.button.iconButtonSize,
+	      zIndex = _context$muiTheme.zIndex;
+
+
+	  var flatButtonSize = 36;
+
+	  var styles = {
+	    root: {
+	      position: 'relative',
+	      zIndex: zIndex.appBar,
+	      width: '100%',
+	      display: 'flex',
+	      backgroundColor: appBar.color,
+	      paddingLeft: appBar.padding,
+	      paddingRight: appBar.padding
+	    },
+	    title: {
+	      whiteSpace: 'nowrap',
+	      overflow: 'hidden',
+	      textOverflow: 'ellipsis',
+	      margin: 0,
+	      paddingTop: 0,
+	      letterSpacing: 0,
+	      fontSize: 24,
+	      fontWeight: appBar.titleFontWeight,
+	      color: appBar.textColor,
+	      height: appBar.height,
+	      lineHeight: appBar.height + 'px'
+	    },
+	    mainElement: {
+	      boxFlex: 1,
+	      flex: '1'
+	    },
+	    iconButtonStyle: {
+	      marginTop: (appBar.height - iconButtonSize) / 2,
+	      marginRight: 8,
+	      marginLeft: -16
+	    },
+	    iconButtonIconStyle: {
+	      fill: appBar.textColor,
+	      color: appBar.textColor
+	    },
+	    flatButton: {
+	      color: appBar.textColor,
+	      marginTop: (iconButtonSize - flatButtonSize) / 2 + 1
+	    }
+	  };
+
+	  return styles;
+	}
+
+	var AppBar = function (_Component) {
+	  (0, _inherits3.default)(AppBar, _Component);
+
+	  function AppBar() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    (0, _classCallCheck3.default)(this, AppBar);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = AppBar.__proto__ || (0, _getPrototypeOf2.default)(AppBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleTouchTapLeftIconButton = function (event) {
+	      if (_this.props.onLeftIconButtonTouchTap) {
+	        _this.props.onLeftIconButtonTouchTap(event);
+	      }
+	    }, _this.handleTouchTapRightIconButton = function (event) {
+	      if (_this.props.onRightIconButtonTouchTap) {
+	        _this.props.onRightIconButtonTouchTap(event);
+	      }
+	    }, _this.handleTitleTouchTap = function (event) {
+	      if (_this.props.onTitleTouchTap) {
+	        _this.props.onTitleTouchTap(event);
+	      }
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+
+	  (0, _createClass3.default)(AppBar, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementLeft || !this.props.iconClassNameLeft, 'Material-UI: Properties iconElementLeft\n      and iconClassNameLeft cannot be simultaneously defined. Please use one or the other.') : void 0;
+
+	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementRight || !this.props.iconClassNameRight, 'Material-UI: Properties iconElementRight\n      and iconClassNameRight cannot be simultaneously defined. Please use one or the other.') : void 0;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          title = _props.title,
+	          titleStyle = _props.titleStyle,
+	          iconStyleLeft = _props.iconStyleLeft,
+	          iconStyleRight = _props.iconStyleRight,
+	          onTitleTouchTap = _props.onTitleTouchTap,
+	          showMenuIconButton = _props.showMenuIconButton,
+	          iconElementLeft = _props.iconElementLeft,
+	          iconElementRight = _props.iconElementRight,
+	          iconClassNameLeft = _props.iconClassNameLeft,
+	          iconClassNameRight = _props.iconClassNameRight,
+	          onLeftIconButtonTouchTap = _props.onLeftIconButtonTouchTap,
+	          onRightIconButtonTouchTap = _props.onRightIconButtonTouchTap,
+	          className = _props.className,
+	          style = _props.style,
+	          zDepth = _props.zDepth,
+	          children = _props.children,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['title', 'titleStyle', 'iconStyleLeft', 'iconStyleRight', 'onTitleTouchTap', 'showMenuIconButton', 'iconElementLeft', 'iconElementRight', 'iconClassNameLeft', 'iconClassNameRight', 'onLeftIconButtonTouchTap', 'onRightIconButtonTouchTap', 'className', 'style', 'zDepth', 'children']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+
+	      var styles = getStyles(this.props, this.context);
+
+	      var menuElementLeft = void 0;
+	      var menuElementRight = void 0;
+
+	      // If the title is a string, wrap in an h1 tag.
+	      // If not, wrap in a div tag.
+	      var titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
+
+	      var titleElement = _react2.default.createElement(titleComponent, {
+	        onTouchTap: this.handleTitleTouchTap,
+	        style: prepareStyles((0, _simpleAssign2.default)(styles.title, styles.mainElement, titleStyle))
+	      }, title);
+
+	      var iconLeftStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, iconStyleLeft);
+
+	      if (showMenuIconButton) {
+	        if (iconElementLeft) {
+	          var iconElementLeftProps = {};
+
+	          if (iconElementLeft.type.muiName === 'IconButton') {
+	            var iconElemLeftChildren = iconElementLeft.props.children;
+	            var iconButtonIconStyle = !(iconElemLeftChildren && iconElemLeftChildren.props && iconElemLeftChildren.props.color) ? styles.iconButtonIconStyle : null;
+
+	            iconElementLeftProps.iconStyle = (0, _simpleAssign2.default)({}, iconButtonIconStyle, iconElementLeft.props.iconStyle);
+	          }
+
+	          if (!iconElementLeft.props.onTouchTap && this.props.onLeftIconButtonTouchTap) {
+	            iconElementLeftProps.onTouchTap = this.handleTouchTapLeftIconButton;
+	          }
+
+	          menuElementLeft = _react2.default.createElement(
+	            'div',
+	            { style: prepareStyles(iconLeftStyle) },
+	            (0, _keys2.default)(iconElementLeftProps).length > 0 ? (0, _react.cloneElement)(iconElementLeft, iconElementLeftProps) : iconElementLeft
+	          );
+	        } else {
+	          menuElementLeft = _react2.default.createElement(
+	            _IconButton2.default,
+	            {
+	              style: iconLeftStyle,
+	              iconStyle: styles.iconButtonIconStyle,
+	              iconClassName: iconClassNameLeft,
+	              onTouchTap: this.handleTouchTapLeftIconButton
+	            },
+	            iconClassNameLeft ? '' : _react2.default.createElement(_menu2.default, { style: (0, _simpleAssign2.default)({}, styles.iconButtonIconStyle) })
+	          );
+	        }
+	      }
+
+	      var iconRightStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, {
+	        marginRight: -16,
+	        marginLeft: 'auto'
+	      }, iconStyleRight);
+
+	      if (iconElementRight) {
+	        var iconElementRightProps = {};
+
+	        switch (iconElementRight.type.muiName) {
+	          case 'IconMenu':
+	          case 'IconButton':
+	            var iconElemRightChildren = iconElementRight.props.children;
+	            var _iconButtonIconStyle = !(iconElemRightChildren && iconElemRightChildren.props && iconElemRightChildren.props.color) ? styles.iconButtonIconStyle : null;
+
+	            iconElementRightProps.iconStyle = (0, _simpleAssign2.default)({}, _iconButtonIconStyle, iconElementRight.props.iconStyle);
+	            break;
+
+	          case 'FlatButton':
+	            iconElementRightProps.style = (0, _simpleAssign2.default)({}, styles.flatButton, iconElementRight.props.style);
+	            break;
+
+	          default:
+	        }
+
+	        if (!iconElementRight.props.onTouchTap && this.props.onRightIconButtonTouchTap) {
+	          iconElementRightProps.onTouchTap = this.handleTouchTapRightIconButton;
+	        }
+
+	        menuElementRight = _react2.default.createElement(
+	          'div',
+	          { style: prepareStyles(iconRightStyle) },
+	          (0, _keys2.default)(iconElementRightProps).length > 0 ? (0, _react.cloneElement)(iconElementRight, iconElementRightProps) : iconElementRight
+	        );
+	      } else if (iconClassNameRight) {
+	        menuElementRight = _react2.default.createElement(_IconButton2.default, {
+	          style: iconRightStyle,
+	          iconStyle: styles.iconButtonIconStyle,
+	          iconClassName: iconClassNameRight,
+	          onTouchTap: this.handleTouchTapRightIconButton
+	        });
+	      }
+
+	      return _react2.default.createElement(
+	        _Paper2.default,
+	        (0, _extends3.default)({}, other, {
+	          rounded: false,
+	          className: className,
+	          style: (0, _simpleAssign2.default)({}, styles.root, style),
+	          zDepth: zDepth
+	        }),
+	        menuElementLeft,
+	        titleElement,
+	        menuElementRight,
+	        children
+	      );
+	    }
+	  }]);
+	  return AppBar;
+	}(_react.Component);
+
+	AppBar.muiName = 'AppBar';
+	AppBar.defaultProps = {
+	  showMenuIconButton: true,
+	  title: '',
+	  zDepth: 1
+	};
+	AppBar.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? AppBar.propTypes = {
+	  /**
+	   * Can be used to render a tab inside an app bar for instance.
+	   */
+	  children: _react.PropTypes.node,
+	  /**
+	   * Applied to the app bar's root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * The classname of the icon on the left of the app bar.
+	   * If you are using a stylesheet for your icons, enter the class name for the icon to be used here.
+	   */
+	  iconClassNameLeft: _react.PropTypes.string,
+	  /**
+	   * Similiar to the iconClassNameLeft prop except that
+	   * it applies to the icon displayed on the right of the app bar.
+	   */
+	  iconClassNameRight: _react.PropTypes.string,
+	  /**
+	   * The custom element to be displayed on the left side of the
+	   * app bar such as an SvgIcon.
+	   */
+	  iconElementLeft: _react.PropTypes.element,
+	  /**
+	   * Similiar to the iconElementLeft prop except that this element is displayed on the right of the app bar.
+	   */
+	  iconElementRight: _react.PropTypes.element,
+	  /**
+	   * Override the inline-styles of the element displayed on the left side of the app bar.
+	   */
+	  iconStyleLeft: _react.PropTypes.object,
+	  /**
+	   * Override the inline-styles of the element displayed on the right side of the app bar.
+	   */
+	  iconStyleRight: _react.PropTypes.object,
+	  /**
+	   * Callback function for when the left icon is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the left `IconButton`.
+	   */
+	  onLeftIconButtonTouchTap: _react.PropTypes.func,
+	  /**
+	   * Callback function for when the right icon is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the right `IconButton`.
+	   */
+	  onRightIconButtonTouchTap: _react.PropTypes.func,
+	  /**
+	   * Callback function for when the title text is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the `title` node.
+	   */
+	  onTitleTouchTap: _react.PropTypes.func,
+	  /**
+	   * Determines whether or not to display the Menu icon next to the title.
+	   * Setting this prop to false will hide the icon.
+	   */
+	  showMenuIconButton: _react.PropTypes.bool,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * The title to display on the app bar.
+	   */
+	  title: _react.PropTypes.node,
+	  /**
+	   * Override the inline-styles of the app bar's title element.
+	   */
+	  titleStyle: _react.PropTypes.object,
+	  /**
+	   * The zDepth of the component.
+	   * The shadow of the app bar is also dependent on this property.
+	   */
+	  zDepth: _propTypes2.default.zDepth
+	} : void 0;
+	exports.default = AppBar;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 477 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(406);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(416);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NavigationMenu = function NavigationMenu(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' })
+	  );
+	};
+	NavigationMenu = (0, _pure2.default)(NavigationMenu);
+	NavigationMenu.displayName = 'NavigationMenu';
+	NavigationMenu.muiName = 'SvgIcon';
+
+	exports.default = NavigationMenu;
 
 /***/ }
 /******/ ]);

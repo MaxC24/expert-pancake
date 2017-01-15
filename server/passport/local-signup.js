@@ -8,7 +8,6 @@ module.exports = new PassportLocalStrategy({
 	session: false,
 	passReqToCallback: true
 }, (req, email, password, done) => {
-	console.log('signup strategy reached ', req.body,'\n', email,'\n', password,'\n', done);
 	const userData = {
 	    email: email.trim(),
 	    password: password.trim(),

@@ -1,5 +1,7 @@
 const express = require('express');
 const router = new express.Router();
+const Referral = require('mongoose').model('Referral');
+const User = require('mongoose').model('User');
 
 router.get('/dashboard', (req, res) => {
 	res.status(200).json({
@@ -10,23 +12,37 @@ router.get('/dashboard', (req, res) => {
 });
 
 router.put('/referrals', (req, res) => {
-
-	if(!req.user.referrals.include(req.body)){
-		req.user.referrals.push(req.body);
-		req.user.save()
-		.then(user =>{
-			res.status(200).json({
-				email: user.email,
-				name: user.name,
-				referrals: user.referrals
-			})
+	Referral.findOne(req.body)
+	.then(referral => {
+		
+		if(!referral) {
+			return Referral.create(req.body);
+		} else {
+			const error = new Error();
+			error.message = 'The user has been already referred';
+			throw error;
+		}
+	})
+	.then(referral => {
+		return referral.addToUser(req.user);
+	})
+	.then(user => {
+		console.log(user);
+		return User.populate(user, 'referrals');
+	})
+	.then(popUser => {
+		res.status(200).json({
+			referrals: popUser.referrals
 		})
-		.catch( err=> {
-			console.log(err.message);
+	})
+	.catch(err => {
+		console.log('Error: ', err.message);
+		res.status(401).json({
+			errors: {
+				message: err.message
+			}
 		})
-	} else {
-		// send back error message
-	}
+	})
 })
 
 module.exports = router;
