@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const Referral = require('mongoose').model('Referral');
 const User = require('mongoose').model('User');
+const validator = require('validator');
 
 router.get('/dashboard', (req, res) => {
 	res.status(200).json({
@@ -12,8 +13,14 @@ router.get('/dashboard', (req, res) => {
 });
 
 router.put('/referrals', (req, res) => {
+	
 	Referral.findOne(req.body)
 	.then(referral => {
+		if(!validator.isEmail(req.body.email)) {
+			const error = new Error();
+			error.message = 'Is not a valid email';
+			throw error;
+		}
 		if(!referral) {
 			return Referral.create(req.body);
 		} else {
@@ -44,7 +51,6 @@ router.put('/referrals', (req, res) => {
 })
 
 router.get('/referrals', (req, res) => {
-	console.log('get referrals')
 	User.populate(req.user, 'referrals')
 	.then(popUser => {
 		return res.status(200).json({
@@ -53,6 +59,25 @@ router.get('/referrals', (req, res) => {
 	})
 	.catch(err => {
 		console.log(err.message);
+	})
+})
+
+
+router.get('/users', (req, res) => {
+	User.find({})
+	.then( users => {
+		users = users.sort((a, b) => {
+			return a.referrals.length < b.referrals.length;
+		})
+		.map(user => {
+			return user.name;
+		})
+		res.status(200).json({
+			users
+		})
+	})
+	.catch(err => {
+		console.log(err);
 	})
 })
 

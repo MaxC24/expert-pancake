@@ -8,25 +8,21 @@ import AppBar from 'material-ui/AppBar';
 const Dashboard = ({secretData, errors, referral, onChange}) => {
 	return (
 	<Card className="userdash">
-		
 		<AppBar
 			showMenuIconButton={false}
 			title={ secretData.name }
 		>
-			<Link style={{'margin': '1.2em', 'color': 'white'}} to="/logout" >LOGOUT</Link> 
+			<Link className="logout-button" to="/board" >PRIZE BOARD</Link> 
+			<Link className="logout-button" to="/logout" >LOGOUT</Link> 
 		</ AppBar>
 
 		{ secretData && (
 			<div>
-				<CardText
-					style={{ fontSize: '20px'}}
-				>
-					Refer someone:
+				<CardText style={{ fontSize: '20px'}} >
 					<ReferralsContainer />
 				</CardText> 
 				
-			</div> )
-		}
+			</div> ) }
 	</Card>)
 }
 

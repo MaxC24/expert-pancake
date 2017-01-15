@@ -3,6 +3,7 @@ import Homepage from './components/HomePage.jsx';
 import DashboardPage from './containers/DashboardPage.jsx';
 import LoginPage from './containers/LoginPage.jsx';
 import SignUpPage from './containers/SignUpPage.jsx';
+import BoardPage from './containers/BoardPage.jsx';
 import Auth from './modules/Auth';
 
 const routes = {
@@ -35,6 +36,10 @@ const routes = {
 				Auth.deauthenticateUser();
 				replace('/');
 			}
+		},
+		{
+			path: '/board',
+			component: BoardPage
 		}
 	]
 }

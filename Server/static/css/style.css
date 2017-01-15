@@ -68,7 +68,8 @@ a:hover {
 }
 
 body {
-  background-image: url('/img/background1.jpg');
+  background-color: #00bcd4;
+  /*background-image: url('/img/background1.jpg');*/
 }
 
 /* User Dashboard */
@@ -76,7 +77,14 @@ body {
 .userdash {
   margin: 5vh auto;
   padding: 10px;
-  text-align: center;
-  width: 70vw;
-  text-align: left;
+  width: 900px;
+}
+
+.logout-button {
+  margin: 1.2em; 
+  color: white;
+}
+
+.logout-button:hover {
+  color:#1976d2;
 }
