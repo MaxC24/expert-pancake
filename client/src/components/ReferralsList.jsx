@@ -1,7 +1,7 @@
 import React from 'react';
 import List, { ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
+import People from 'material-ui/svg-icons/social/people';
 import Card from 'material-ui/Card';
 
 const ReferralList = ({referrals}) => {
@@ -14,7 +14,7 @@ const ReferralList = ({referrals}) => {
                     return(<ListItem 
                             key={i}
                             primaryText={ref.email }
-                            rightIcon={<CommunicationChatBubble />}
+                            rightIcon={<People />}
                         />) 
                     }) 
                 }

@@ -44209,9 +44209,9 @@
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
-	var _chatBubble = __webpack_require__(488);
+	var _people = __webpack_require__(491);
 
-	var _chatBubble2 = _interopRequireDefault(_chatBubble);
+	var _people2 = _interopRequireDefault(_people);
 
 	var _Card = __webpack_require__(391);
 
@@ -44238,7 +44238,7 @@
 	                return _react2.default.createElement(_List.ListItem, {
 	                    key: i,
 	                    primaryText: ref.email,
-	                    rightIcon: _react2.default.createElement(_chatBubble2.default, null)
+	                    rightIcon: _react2.default.createElement(_people2.default, null)
 	                });
 	            })
 	        )
@@ -45510,43 +45510,7 @@
 	exports.default = makeSelectable;
 
 /***/ },
-/* 488 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _pure = __webpack_require__(406);
-
-	var _pure2 = _interopRequireDefault(_pure);
-
-	var _SvgIcon = __webpack_require__(416);
-
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var CommunicationChatBubble = function CommunicationChatBubble(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z' })
-	  );
-	};
-	CommunicationChatBubble = (0, _pure2.default)(CommunicationChatBubble);
-	CommunicationChatBubble.displayName = 'CommunicationChatBubble';
-	CommunicationChatBubble.muiName = 'SvgIcon';
-
-	exports.default = CommunicationChatBubble;
-
-/***/ },
+/* 488 */,
 /* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45687,6 +45651,43 @@
 	};
 
 	exports.default = Board;
+
+/***/ },
+/* 491 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(406);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(416);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SocialPeople = function SocialPeople(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' })
+	  );
+	};
+	SocialPeople = (0, _pure2.default)(SocialPeople);
+	SocialPeople.displayName = 'SocialPeople';
+	SocialPeople.muiName = 'SvgIcon';
+
+	exports.default = SocialPeople;
 
 /***/ }
 /******/ ]);
