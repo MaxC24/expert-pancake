@@ -45626,15 +45626,15 @@
 
 	    return _react2.default.createElement(
 	        _Card2.default,
-	        { style: { width: '460px', margin: "3vh 180px" } },
+	        { className: 'userdash' },
+	        _react2.default.createElement(
+	            _reactRouter.Link,
+	            { className: 'top-bar-right', to: '/' },
+	            'MY PROFILE'
+	        ),
 	        _react2.default.createElement(
 	            _List2.default,
 	            { style: { width: '430px' } },
-	            _react2.default.createElement(
-	                _reactRouter.Link,
-	                { className: 'top-bar-right', to: '/' },
-	                'MY PROFILE'
-	            ),
 	            _react2.default.createElement(
 	                _Subheader2.default,
 	                null,
