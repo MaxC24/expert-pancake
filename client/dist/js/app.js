@@ -34241,15 +34241,15 @@
 
 	var _DashboardPage2 = _interopRequireDefault(_DashboardPage);
 
-	var _LoginPage = __webpack_require__(455);
+	var _LoginPage = __webpack_require__(484);
 
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
 
-	var _SignUpPage = __webpack_require__(470);
+	var _SignUpPage = __webpack_require__(486);
 
 	var _SignUpPage2 = _interopRequireDefault(_SignUpPage);
 
-	var _BoardPage = __webpack_require__(489);
+	var _BoardPage = __webpack_require__(488);
 
 	var _BoardPage2 = _interopRequireDefault(_BoardPage);
 
@@ -41022,13 +41022,13 @@
 
 	var _reactRouter = __webpack_require__(333);
 
-	var _ReferralsContainer = __webpack_require__(472);
+	var _ReferralsContainer = __webpack_require__(455);
 
 	var _ReferralsContainer2 = _interopRequireDefault(_ReferralsContainer);
 
 	var _Card = __webpack_require__(391);
 
-	var _AppBar = __webpack_require__(475);
+	var _AppBar = __webpack_require__(481);
 
 	var _AppBar2 = _interopRequireDefault(_AppBar);
 
@@ -41081,7 +41081,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -41090,9 +41090,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _LoginForm = __webpack_require__(456);
+	var _ReferralsForm = __webpack_require__(456);
 
-	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+	var _ReferralsForm2 = _interopRequireDefault(_ReferralsForm);
+
+	var _ReferralsList = __webpack_require__(470);
+
+	var _ReferralsList2 = _interopRequireDefault(_ReferralsList);
 
 	var _Auth = __webpack_require__(389);
 
@@ -41106,107 +41110,98 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var LoginPage = function (_React$Component) {
-	  _inherits(LoginPage, _React$Component);
+	var ReferralsContainer = function (_React$Component) {
+	    _inherits(ReferralsContainer, _React$Component);
 
-	  function LoginPage(props, context) {
-	    _classCallCheck(this, LoginPage);
+	    function ReferralsContainer(props) {
+	        _classCallCheck(this, ReferralsContainer);
 
-	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props, context));
+	        var _this = _possibleConstructorReturn(this, (ReferralsContainer.__proto__ || Object.getPrototypeOf(ReferralsContainer)).call(this, props));
 
-	    var storedMessage = localStorage.getItem('successMessage');
-	    var successMessage = '';
-
-	    if (storedMessage) {
-	      successMessage = storedMessage;
-	      localStorage.removeItem('successMessage');
+	        _this.state = {
+	            email: '',
+	            errors: {},
+	            referrals: []
+	        };
+	        _this.changeReferral = _this.changeReferral.bind(_this);
+	        _this.processForm = _this.processForm.bind(_this);
+	        return _this;
 	    }
 
-	    _this.state = {
-	      errors: {},
-	      successMessage: successMessage,
-	      user: {
-	        email: '',
-	        password: ''
-	      }
-	    };
-
-	    _this.processForm = _this.processForm.bind(_this);
-	    _this.changeUser = _this.changeUser.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(LoginPage, [{
-	    key: 'processForm',
-	    value: function processForm(event) {
-	      var _this2 = this;
-
-	      event.preventDefault();
-
-	      var email = encodeURIComponent(this.state.user.email);
-	      var password = encodeURIComponent(this.state.user.password);
-	      var formData = 'email=' + email + '&password=' + password;
-	      var xhr = new XMLHttpRequest();
-	      xhr.open('post', '/auth/login');
-	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	      xhr.responseType = 'json';
-	      xhr.addEventListener('load', function () {
-	        if (xhr.status === 200) {
-	          //SUCCESS
-
-	          //change the component-container state
-	          _this2.setState({
-	            errors: {}
-	          });
-
-	          //save the token
-	          _Auth2.default.authenticateUser(xhr.response.token);
-
-	          //change the current url to /
-	          _this2.context.router.replace('/');
-	        } else {
-	          //FAILURE
-	          var errors = xhr.response.errors ? xhr.response.errors : {};
-	          errors.summary = xhr.response.message;
-	          _this2.setState({
-	            errors: errors
-	          });
+	    _createClass(ReferralsContainer, [{
+	        key: 'changeReferral',
+	        value: function changeReferral(event) {
+	            var email = event.target.value;
+	            this.setState({
+	                email: email
+	            });
 	        }
-	      });
-	      xhr.send(formData);
-	    }
-	  }, {
-	    key: 'changeUser',
-	    value: function changeUser(event) {
-	      var field = event.target.name;
-	      var user = this.state.user;
-	      user[field] = event.target.value;
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
 
-	      this.setState({
-	        user: user
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(_LoginForm2.default, {
-	        onSubmit: this.processForm,
-	        onChange: this.changeUser,
-	        errors: this.state.errors,
-	        successMessage: this.state.successMessage,
-	        user: this.state.user
-	      });
-	    }
-	  }]);
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('get', '/api/referrals');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                _this2.setState(xhr.response);
+	            });
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'processForm',
+	        value: function processForm(event) {
+	            var _this3 = this;
 
-	  return LoginPage;
+	            event.preventDefault();
+
+	            var email = encodeURIComponent(this.state.email);
+	            var formData = 'email=' + email;
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('put', '/api/referrals');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this3.setState({
+	                        errors: {},
+	                        email: '',
+	                        referrals: xhr.response.referrals
+	                    });
+	                } else {
+	                    console.log('ERRRRROORRRRR', xhr.response.errors);
+	                    _this3.setState({
+	                        errors: xhr.response.errors
+	                    });
+	                }
+	            });
+	            xhr.send(formData);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_ReferralsForm2.default, {
+	                    onChange: this.changeReferral,
+	                    errors: this.state.errors,
+	                    referral: this.state.email,
+	                    onSubmit: this.processForm
+	                }),
+	                this.state.referrals && _react2.default.createElement(_ReferralsList2.default, {
+	                    referrals: this.state.referrals })
+	            );
+	        }
+	    }]);
+
+	    return ReferralsContainer;
 	}(_react2.default.Component);
 
-	LoginPage.contextTypes = {
-	  router: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = LoginPage;
+	exports.default = ReferralsContainer;
 
 /***/ },
 /* 456 */
@@ -41215,105 +41210,52 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(333);
-
-	var _Card = __webpack_require__(391);
-
-	var _RaisedButton = __webpack_require__(457);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	var _TextField = __webpack_require__(459);
+	var _TextField = __webpack_require__(457);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
+	var _RaisedButton = __webpack_require__(468);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var LoginForm = function LoginForm(_ref) {
-	  var onSubmit = _ref.onSubmit,
-	      onChange = _ref.onChange,
-	      successMessage = _ref.successMessage,
-	      errors = _ref.errors,
-	      user = _ref.user;
-	  return _react2.default.createElement(
-	    _Card.Card,
-	    { className: 'container' },
-	    _react2.default.createElement(
-	      'form',
-	      { action: '/', onSubmit: onSubmit },
-	      _react2.default.createElement(
-	        'h2',
-	        { className: 'card-heading' },
-	        'Login'
-	      ),
-	      successMessage && _react2.default.createElement(
-	        'p',
-	        { className: 'success-message' },
-	        successMessage
-	      ),
-	      errors.summary && _react2.default.createElement(
-	        'p',
-	        { className: 'error-message' },
-	        errors.summary
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'field-line' },
-	        _react2.default.createElement(_TextField2.default, {
-	          floatingLabelText: 'Email',
-	          name: 'email',
-	          errorText: errors.email,
-	          onChange: onChange,
-	          value: user.email
-	        })
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'field-line' },
-	        _react2.default.createElement(_TextField2.default, {
-	          floatingLabelText: 'Password',
-	          type: 'password',
-	          name: 'password',
-	          onChange: onChange,
-	          errorText: errors.password,
-	          value: user.password
-	        })
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'button-line' },
-	        _react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Log in', primary: true })
-	      ),
-	      _react2.default.createElement(
-	        _Card.CardText,
-	        null,
-	        'Don\'t have an account? ',
+	var ReferralsForm = function ReferralsForm(_ref) {
+	    var onChange = _ref.onChange,
+	        errors = _ref.errors,
+	        referral = _ref.referral,
+	        onSubmit = _ref.onSubmit;
+
+	    return _react2.default.createElement(
+	        'form',
+	        { action: '/', onSubmit: onSubmit },
 	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/signup' },
-	          'Create one'
+	            'span',
+	            { style: { margin: '0 1vw 0 170px', fontSize: '14px' } },
+	            'SEND A REFERRAL:'
 	        ),
-	        '.'
-	      )
-	    )
-	  );
+	        _react2.default.createElement(_TextField2.default, {
+	            floatingLabelText: 'Email address',
+	            errorText: errors.message,
+	            onChange: onChange,
+	            value: referral
+	        }),
+	        _react2.default.createElement(
+	            'span',
+	            { className: 'button-line' },
+	            _react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Submit', primary: true })
+	        )
+	    );
 	};
 
-	LoginForm.propTypes = {
-	  onSubmit: _react.PropTypes.func.isRequired,
-	  onChange: _react.PropTypes.func.isRequired,
-	  errors: _react.PropTypes.object.isRequired,
-	  user: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = LoginForm;
+	exports.default = ReferralsForm;
 
 /***/ },
 /* 457 */
@@ -41326,507 +41268,7 @@
 	});
 	exports.default = undefined;
 
-	var _RaisedButton = __webpack_require__(458);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _RaisedButton2.default;
-
-/***/ },
-/* 458 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends2 = __webpack_require__(393);
-
-	var _extends3 = _interopRequireDefault(_extends2);
-
-	var _objectWithoutProperties2 = __webpack_require__(398);
-
-	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
-
-	var _getPrototypeOf = __webpack_require__(317);
-
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-	var _classCallCheck2 = __webpack_require__(315);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _createClass2 = __webpack_require__(320);
-
-	var _createClass3 = _interopRequireDefault(_createClass2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(324);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(325);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _simpleAssign = __webpack_require__(399);
-
-	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _transitions = __webpack_require__(403);
-
-	var _transitions2 = _interopRequireDefault(_transitions);
-
-	var _colorManipulator = __webpack_require__(241);
-
-	var _childUtils = __webpack_require__(422);
-
-	var _EnhancedButton = __webpack_require__(421);
-
-	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
-
-	var _Paper = __webpack_require__(400);
-
-	var _Paper2 = _interopRequireDefault(_Paper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function validateLabel(props, propName, componentName) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (!props.children && props.label !== 0 && !props.label && !props.icon) {
-	      return new Error('Required prop label or children or icon was not specified in ' + componentName + '.');
-	    }
-	  }
-	}
-
-	function getStyles(props, context, state) {
-	  var _context$muiTheme = context.muiTheme,
-	      baseTheme = _context$muiTheme.baseTheme,
-	      button = _context$muiTheme.button,
-	      raisedButton = _context$muiTheme.raisedButton;
-	  var disabled = props.disabled,
-	      disabledBackgroundColor = props.disabledBackgroundColor,
-	      disabledLabelColor = props.disabledLabelColor,
-	      fullWidth = props.fullWidth,
-	      icon = props.icon,
-	      label = props.label,
-	      labelPosition = props.labelPosition,
-	      primary = props.primary,
-	      secondary = props.secondary,
-	      style = props.style;
-
-
-	  var amount = primary || secondary ? 0.4 : 0.08;
-
-	  var backgroundColor = raisedButton.color;
-	  var labelColor = raisedButton.textColor;
-
-	  if (disabled) {
-	    backgroundColor = disabledBackgroundColor || raisedButton.disabledColor;
-	    labelColor = disabledLabelColor || raisedButton.disabledTextColor;
-	  } else if (primary) {
-	    backgroundColor = raisedButton.primaryColor;
-	    labelColor = raisedButton.primaryTextColor;
-	  } else if (secondary) {
-	    backgroundColor = raisedButton.secondaryColor;
-	    labelColor = raisedButton.secondaryTextColor;
-	  } else {
-	    if (props.backgroundColor) {
-	      backgroundColor = props.backgroundColor;
-	    }
-	    if (props.labelColor) {
-	      labelColor = props.labelColor;
-	    }
-	  }
-
-	  var buttonHeight = style && style.height || button.height;
-	  var borderRadius = 2;
-
-	  return {
-	    root: {
-	      display: 'inline-block',
-	      transition: _transitions2.default.easeOut(),
-	      minWidth: fullWidth ? '100%' : button.minWidth
-	    },
-	    button: {
-	      position: 'relative',
-	      height: buttonHeight,
-	      lineHeight: buttonHeight + 'px',
-	      width: '100%',
-	      padding: 0,
-	      borderRadius: borderRadius,
-	      transition: _transitions2.default.easeOut(),
-	      backgroundColor: backgroundColor,
-	      // That's the default value for a button but not a link
-	      textAlign: 'center'
-	    },
-	    label: {
-	      position: 'relative',
-	      opacity: 1,
-	      fontSize: raisedButton.fontSize,
-	      letterSpacing: 0,
-	      textTransform: raisedButton.textTransform || button.textTransform || 'uppercase',
-	      fontWeight: raisedButton.fontWeight,
-	      margin: 0,
-	      userSelect: 'none',
-	      paddingLeft: icon && labelPosition !== 'before' ? 8 : baseTheme.spacing.desktopGutterLess,
-	      paddingRight: icon && labelPosition === 'before' ? 8 : baseTheme.spacing.desktopGutterLess,
-	      color: labelColor
-	    },
-	    icon: {
-	      verticalAlign: 'middle',
-	      marginLeft: label && labelPosition !== 'before' ? 12 : 0,
-	      marginRight: label && labelPosition === 'before' ? 12 : 0
-	    },
-	    overlay: {
-	      height: buttonHeight,
-	      borderRadius: borderRadius,
-	      backgroundColor: (state.keyboardFocused || state.hovered) && !disabled && (0, _colorManipulator.fade)(labelColor, amount),
-	      transition: _transitions2.default.easeOut(),
-	      top: 0
-	    },
-	    ripple: {
-	      color: labelColor,
-	      opacity: !(primary || secondary) ? 0.1 : 0.16
-	    }
-	  };
-	}
-
-	var RaisedButton = function (_Component) {
-	  (0, _inherits3.default)(RaisedButton, _Component);
-
-	  function RaisedButton() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    (0, _classCallCheck3.default)(this, RaisedButton);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = RaisedButton.__proto__ || (0, _getPrototypeOf2.default)(RaisedButton)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	      hovered: false,
-	      keyboardFocused: false,
-	      touched: false,
-	      initialZDepth: 0,
-	      zDepth: 0
-	    }, _this.handleMouseDown = function (event) {
-	      // only listen to left clicks
-	      if (event.button === 0) {
-	        _this.setState({
-	          zDepth: _this.state.initialZDepth + 1
-	        });
-	      }
-	      if (_this.props.onMouseDown) {
-	        _this.props.onMouseDown(event);
-	      }
-	    }, _this.handleMouseUp = function (event) {
-	      _this.setState({
-	        zDepth: _this.state.initialZDepth
-	      });
-	      if (_this.props.onMouseUp) {
-	        _this.props.onMouseUp(event);
-	      }
-	    }, _this.handleMouseLeave = function (event) {
-	      if (!_this.state.keyboardFocused) {
-	        _this.setState({
-	          zDepth: _this.state.initialZDepth,
-	          hovered: false
-	        });
-	      }
-	      if (_this.props.onMouseLeave) {
-	        _this.props.onMouseLeave(event);
-	      }
-	    }, _this.handleMouseEnter = function (event) {
-	      if (!_this.state.keyboardFocused && !_this.state.touched) {
-	        _this.setState({
-	          hovered: true
-	        });
-	      }
-	      if (_this.props.onMouseEnter) {
-	        _this.props.onMouseEnter(event);
-	      }
-	    }, _this.handleTouchStart = function (event) {
-	      _this.setState({
-	        touched: true,
-	        zDepth: _this.state.initialZDepth + 1
-	      });
-
-	      if (_this.props.onTouchStart) {
-	        _this.props.onTouchStart(event);
-	      }
-	    }, _this.handleTouchEnd = function (event) {
-	      _this.setState({
-	        touched: true,
-	        zDepth: _this.state.initialZDepth
-	      });
-
-	      if (_this.props.onTouchEnd) {
-	        _this.props.onTouchEnd(event);
-	      }
-	    }, _this.handleKeyboardFocus = function (event, keyboardFocused) {
-	      var zDepth = keyboardFocused && !_this.props.disabled ? _this.state.initialZDepth + 1 : _this.state.initialZDepth;
-
-	      _this.setState({
-	        zDepth: zDepth,
-	        keyboardFocused: keyboardFocused
-	      });
-	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-	  }
-
-	  (0, _createClass3.default)(RaisedButton, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      var zDepth = this.props.disabled ? 0 : 1;
-	      this.setState({
-	        zDepth: zDepth,
-	        initialZDepth: zDepth
-	      });
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var zDepth = nextProps.disabled ? 0 : 1;
-	      var nextState = {
-	        zDepth: zDepth,
-	        initialZDepth: zDepth
-	      };
-
-	      if (nextProps.disabled) {
-	        nextState.hovered = false;
-	      }
-
-	      this.setState(nextState);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props,
-	          backgroundColor = _props.backgroundColor,
-	          buttonStyle = _props.buttonStyle,
-	          children = _props.children,
-	          className = _props.className,
-	          disabled = _props.disabled,
-	          disabledBackgroundColor = _props.disabledBackgroundColor,
-	          disabledLabelColor = _props.disabledLabelColor,
-	          fullWidth = _props.fullWidth,
-	          icon = _props.icon,
-	          label = _props.label,
-	          labelColor = _props.labelColor,
-	          labelPosition = _props.labelPosition,
-	          labelStyle = _props.labelStyle,
-	          overlayStyle = _props.overlayStyle,
-	          primary = _props.primary,
-	          rippleStyle = _props.rippleStyle,
-	          secondary = _props.secondary,
-	          style = _props.style,
-	          other = (0, _objectWithoutProperties3.default)(_props, ['backgroundColor', 'buttonStyle', 'children', 'className', 'disabled', 'disabledBackgroundColor', 'disabledLabelColor', 'fullWidth', 'icon', 'label', 'labelColor', 'labelPosition', 'labelStyle', 'overlayStyle', 'primary', 'rippleStyle', 'secondary', 'style']);
-	      var prepareStyles = this.context.muiTheme.prepareStyles;
-
-	      var styles = getStyles(this.props, this.context, this.state);
-	      var mergedRippleStyles = (0, _simpleAssign2.default)({}, styles.ripple, rippleStyle);
-
-	      var buttonEventHandlers = disabled ? {} : {
-	        onMouseDown: this.handleMouseDown,
-	        onMouseUp: this.handleMouseUp,
-	        onMouseLeave: this.handleMouseLeave,
-	        onMouseEnter: this.handleMouseEnter,
-	        onTouchStart: this.handleTouchStart,
-	        onTouchEnd: this.handleTouchEnd,
-	        onKeyboardFocus: this.handleKeyboardFocus
-	      };
-
-	      var labelElement = label && _react2.default.createElement(
-	        'span',
-	        { style: prepareStyles((0, _simpleAssign2.default)(styles.label, labelStyle)) },
-	        label
-	      );
-
-	      var iconCloned = icon && (0, _react.cloneElement)(icon, {
-	        color: icon.props.color || styles.label.color,
-	        style: (0, _simpleAssign2.default)(styles.icon, icon.props.style)
-	      });
-
-	      // Place label before or after children.
-	      var childrenFragment = labelPosition === 'before' ? {
-	        labelElement: labelElement,
-	        iconCloned: iconCloned,
-	        children: children
-	      } : {
-	        children: children,
-	        iconCloned: iconCloned,
-	        labelElement: labelElement
-	      };
-
-	      var enhancedButtonChildren = (0, _childUtils.createChildFragment)(childrenFragment);
-
-	      return _react2.default.createElement(
-	        _Paper2.default,
-	        {
-	          className: className,
-	          style: (0, _simpleAssign2.default)(styles.root, style),
-	          zDepth: this.state.zDepth
-	        },
-	        _react2.default.createElement(
-	          _EnhancedButton2.default,
-	          (0, _extends3.default)({}, other, buttonEventHandlers, {
-	            ref: 'container',
-	            disabled: disabled,
-	            style: (0, _simpleAssign2.default)(styles.button, buttonStyle),
-	            focusRippleColor: mergedRippleStyles.color,
-	            touchRippleColor: mergedRippleStyles.color,
-	            focusRippleOpacity: mergedRippleStyles.opacity,
-	            touchRippleOpacity: mergedRippleStyles.opacity
-	          }),
-	          _react2.default.createElement(
-	            'div',
-	            {
-	              ref: 'overlay',
-	              style: prepareStyles((0, _simpleAssign2.default)(styles.overlay, overlayStyle))
-	            },
-	            enhancedButtonChildren
-	          )
-	        )
-	      );
-	    }
-	  }]);
-	  return RaisedButton;
-	}(_react.Component);
-
-	RaisedButton.muiName = 'RaisedButton';
-	RaisedButton.defaultProps = {
-	  disabled: false,
-	  labelPosition: 'after',
-	  fullWidth: false,
-	  primary: false,
-	  secondary: false
-	};
-	RaisedButton.contextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	process.env.NODE_ENV !== "production" ? RaisedButton.propTypes = {
-	  /**
-	   * Override the default background color for the button,
-	   * but not the default disabled background color
-	   * (use `disabledBackgroundColor` for this).
-	   */
-	  backgroundColor: _react.PropTypes.string,
-	  /**
-	   * Override the inline-styles of the button element.
-	   */
-	  buttonStyle: _react.PropTypes.object,
-	  /**
-	   * The content of the button.
-	   * If a label is provided via the `label` prop, the text within the label
-	   * will be displayed in addition to the content provided here.
-	   */
-	  children: _react.PropTypes.node,
-	  /**
-	   * The CSS class name of the root element.
-	   */
-	  className: _react.PropTypes.string,
-	  /**
-	   * If true, the button will be disabled.
-	   */
-	  disabled: _react.PropTypes.bool,
-	  /**
-	   * Override the default background color for the button
-	   * when it is disabled.
-	   */
-	  disabledBackgroundColor: _react.PropTypes.string,
-	  /**
-	   * The color of the button's label when the button is disabled.
-	   */
-	  disabledLabelColor: _react.PropTypes.string,
-	  /**
-	   * If true, the button will take up the full width of its container.
-	   */
-	  fullWidth: _react.PropTypes.bool,
-	  /**
-	   * The URL to link to when the button is clicked.
-	   */
-	  href: _react.PropTypes.string,
-	  /**
-	   * An icon to be displayed within the button.
-	   */
-	  icon: _react.PropTypes.node,
-	  /**
-	   * The label to be displayed within the button.
-	   * If content is provided via the `children` prop, that content will be
-	   * displayed in addition to the label provided here.
-	   */
-	  label: validateLabel,
-	  /**
-	   * The color of the button's label.
-	   */
-	  labelColor: _react.PropTypes.string,
-	  /**
-	   * The position of the button's label relative to the button's `children`.
-	   */
-	  labelPosition: _react.PropTypes.oneOf(['before', 'after']),
-	  /**
-	   * Override the inline-styles of the button's label element.
-	   */
-	  labelStyle: _react.PropTypes.object,
-	  /** @ignore */
-	  onMouseDown: _react.PropTypes.func,
-	  /** @ignore */
-	  onMouseEnter: _react.PropTypes.func,
-	  /** @ignore */
-	  onMouseLeave: _react.PropTypes.func,
-	  /** @ignore */
-	  onMouseUp: _react.PropTypes.func,
-	  /** @ignore */
-	  onTouchEnd: _react.PropTypes.func,
-	  /** @ignore */
-	  onTouchStart: _react.PropTypes.func,
-	  /**
-	   * Override the inline style of the button overlay.
-	   */
-	  overlayStyle: _react.PropTypes.object,
-	  /**
-	   * If true, the button will use the theme's primary color.
-	   */
-	  primary: _react.PropTypes.bool,
-	  /**
-	   * Override the inline style of the ripple element.
-	   */
-	  rippleStyle: _react.PropTypes.object,
-	  /**
-	   * If true, the button will use the theme's secondary color.
-	   * If both `secondary` and `primary` are true, the button will use
-	   * the theme's primary color.
-	   */
-	  secondary: _react.PropTypes.bool,
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react.PropTypes.object
-	} : void 0;
-	exports.default = RaisedButton;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ },
-/* 459 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = undefined;
-
-	var _TextField = __webpack_require__(460);
+	var _TextField = __webpack_require__(458);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -41835,7 +41277,7 @@
 	exports.default = _TextField2.default;
 
 /***/ },
-/* 460 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -41892,19 +41334,19 @@
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _EnhancedTextarea = __webpack_require__(461);
+	var _EnhancedTextarea = __webpack_require__(459);
 
 	var _EnhancedTextarea2 = _interopRequireDefault(_EnhancedTextarea);
 
-	var _TextFieldHint = __webpack_require__(467);
+	var _TextFieldHint = __webpack_require__(465);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(468);
+	var _TextFieldLabel = __webpack_require__(466);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(469);
+	var _TextFieldUnderline = __webpack_require__(467);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
@@ -42416,7 +41858,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 461 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -42461,7 +41903,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactEventListener = __webpack_require__(462);
+	var _reactEventListener = __webpack_require__(460);
 
 	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
 
@@ -42662,7 +42104,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 462 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -42705,7 +42147,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(463);
+	var _reactAddonsShallowCompare = __webpack_require__(461);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -42713,7 +42155,7 @@
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _supports = __webpack_require__(465);
+	var _supports = __webpack_require__(463);
 
 	var supports = _interopRequireWildcard(_supports);
 
@@ -42875,13 +42317,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 463 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(464);
+	module.exports = __webpack_require__(462);
 
 /***/ },
-/* 464 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42910,7 +42352,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 465 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42920,7 +42362,7 @@
 	});
 	exports.passiveOption = exports.detachEvent = exports.attachEvent = exports.removeEventListener = exports.addEventListener = exports.canUseDOM = undefined;
 
-	var _defineProperty = __webpack_require__(466);
+	var _defineProperty = __webpack_require__(464);
 
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -42963,7 +42405,7 @@
 	}();
 
 /***/ },
-/* 466 */
+/* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42987,7 +42429,7 @@
 	}
 
 /***/ },
-/* 467 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43069,7 +42511,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 468 */
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43188,7 +42630,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 469 */
+/* 467 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43326,427 +42768,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 470 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SignUpForm = __webpack_require__(471);
-
-	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SignUpPage = function (_React$Component) {
-		_inherits(SignUpPage, _React$Component);
-
-		function SignUpPage(props, context) {
-			_classCallCheck(this, SignUpPage);
-
-			var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props, context));
-
-			_this.state = {
-				errors: {},
-				user: {
-					email: '',
-					name: '',
-					password: ''
-				}
-			};
-
-			_this.processForm = _this.processForm.bind(_this);
-			_this.changeUser = _this.changeUser.bind(_this);
-			return _this;
-		}
-
-		_createClass(SignUpPage, [{
-			key: 'changeUser',
-			value: function changeUser(event) {
-				console.log(this.context);
-				var field = event.target.name;
-				var user = this.state.user;
-				user[field] = event.target.value;
-				this.setState({
-					user: user
-				});
-			}
-		}, {
-			key: 'processForm',
-			value: function processForm(event) {
-				var _this2 = this;
-
-				event.preventDefault();
-
-				var name = encodeURIComponent(this.state.user.name);
-				var email = encodeURIComponent(this.state.user.email);
-				var password = encodeURIComponent(this.state.user.password);
-				var formData = 'name=' + name + '&email=' + email + '&password=' + password;
-
-				var xhr = new XMLHttpRequest();
-				xhr.open('post', '/auth/signup');
-				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-				xhr.responseType = 'json';
-				xhr.addEventListener('load', function () {
-					if (xhr.status === 200) {
-						//success
-						console.log('post request succeded');
-						//change the component-container state
-						_this2.setState({
-							errors: {}
-						});
-
-						localStorage.setItem('successMessage', xhr.response.message);
-
-						_this2.context.router.replace('/login');
-					} else {
-						//failure
-						console.log('post request failed with this error: ', xhr.response.message);
-
-						var errors = xhr.response.errors ? xhr.response.errors : {};
-
-						errors.summary = xhr.response.message;
-						_this2.setState({
-							errors: errors
-						});
-					}
-				});
-
-				xhr.send(formData);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(_SignUpForm2.default, {
-					onSubmit: this.processForm,
-					onChange: this.changeUser,
-					errors: this.state.errors,
-					user: this.state.user
-				});
-			}
-		}]);
-
-		return SignUpPage;
-	}(_react2.default.Component);
-
-	SignUpPage.contextTypes = {
-		router: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = SignUpPage;
-
-/***/ },
-/* 471 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(333);
-
-	var _Card = __webpack_require__(391);
-
-	var _RaisedButton = __webpack_require__(457);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	var _TextField = __webpack_require__(459);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SignUpForm = function SignUpForm(_ref) {
-		var onSubmit = _ref.onSubmit,
-		    onChange = _ref.onChange,
-		    errors = _ref.errors,
-		    user = _ref.user;
-		return _react2.default.createElement(
-			_Card.Card,
-			{ className: 'container' },
-			_react2.default.createElement(
-				'form',
-				{ action: '/', onSubmit: onSubmit },
-				_react2.default.createElement(
-					'h2',
-					{ className: 'card-heading' },
-					'Sign Up'
-				),
-				errors.summary && _react2.default.createElement(
-					'p',
-					{ className: 'error-message' },
-					errors.sumamry
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'field-line' },
-					_react2.default.createElement(_TextField2.default, {
-						floatingLabelText: 'Name',
-						name: 'name',
-						errorText: errors.name,
-						onChange: onChange,
-						value: user.name
-					})
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'field-line' },
-					_react2.default.createElement(_TextField2.default, {
-						floatingLabelText: 'Email',
-						name: 'email',
-						errorText: errors.email,
-						onChange: onChange,
-						value: user.email
-					})
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'field-line' },
-					_react2.default.createElement(_TextField2.default, {
-						floatingLabelText: 'Password',
-						type: 'password',
-						name: 'password',
-						errorText: errors.password,
-						onChange: onChange,
-						value: user.password
-					})
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'button-line' },
-					_react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Create New Account', primary: true })
-				),
-				_react2.default.createElement(
-					_Card.CardText,
-					null,
-					'Already have an account? ',
-					_react2.default.createElement(
-						_reactRouter.Link,
-						{ to: '/' },
-						' Log in'
-					)
-				)
-			)
-		);
-	};
-
-	SignUpForm.propTypes = {
-		onSubmit: _react.PropTypes.func.isRequired,
-		onChange: _react.PropTypes.func.isRequired,
-		errors: _react.PropTypes.object.isRequired,
-		user: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = SignUpForm;
-
-/***/ },
-/* 472 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _ReferralsForm = __webpack_require__(474);
-
-	var _ReferralsForm2 = _interopRequireDefault(_ReferralsForm);
-
-	var _ReferralsList = __webpack_require__(478);
-
-	var _ReferralsList2 = _interopRequireDefault(_ReferralsList);
-
-	var _Auth = __webpack_require__(389);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ReferralsContainer = function (_React$Component) {
-	    _inherits(ReferralsContainer, _React$Component);
-
-	    function ReferralsContainer(props) {
-	        _classCallCheck(this, ReferralsContainer);
-
-	        var _this = _possibleConstructorReturn(this, (ReferralsContainer.__proto__ || Object.getPrototypeOf(ReferralsContainer)).call(this, props));
-
-	        _this.state = {
-	            email: '',
-	            errors: {},
-	            referrals: []
-	        };
-	        _this.changeReferral = _this.changeReferral.bind(_this);
-	        _this.processForm = _this.processForm.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(ReferralsContainer, [{
-	        key: 'changeReferral',
-	        value: function changeReferral(event) {
-	            var email = event.target.value;
-	            this.setState({
-	                email: email
-	            });
-	        }
-	    }, {
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            var _this2 = this;
-
-	            var xhr = new XMLHttpRequest();
-	            xhr.open('get', '/api/referrals');
-	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.responseType = 'json';
-	            xhr.addEventListener('load', function () {
-	                _this2.setState(xhr.response);
-	            });
-	            xhr.send();
-	        }
-	    }, {
-	        key: 'processForm',
-	        value: function processForm(event) {
-	            var _this3 = this;
-
-	            event.preventDefault();
-
-	            var email = encodeURIComponent(this.state.email);
-	            var formData = 'email=' + email;
-	            var xhr = new XMLHttpRequest();
-	            xhr.open('put', '/api/referrals');
-	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.responseType = 'json';
-	            xhr.addEventListener('load', function () {
-	                if (xhr.status === 200) {
-	                    _this3.setState({
-	                        errors: {},
-	                        email: '',
-	                        referrals: xhr.response.referrals
-	                    });
-	                } else {
-	                    console.log('ERRRRROORRRRR', xhr.response.errors);
-	                    _this3.setState({
-	                        errors: xhr.response.errors
-	                    });
-	                }
-	            });
-	            xhr.send(formData);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(_ReferralsForm2.default, {
-	                    onChange: this.changeReferral,
-	                    errors: this.state.errors,
-	                    referral: this.state.email,
-	                    onSubmit: this.processForm
-	                }),
-	                this.state.referrals && _react2.default.createElement(_ReferralsList2.default, {
-	                    referrals: this.state.referrals })
-	            );
-	        }
-	    }]);
-
-	    return ReferralsContainer;
-	}(_react2.default.Component);
-
-	exports.default = ReferralsContainer;
-
-/***/ },
-/* 473 */,
-/* 474 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _TextField = __webpack_require__(459);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
-	var _RaisedButton = __webpack_require__(457);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ReferralsForm = function ReferralsForm(_ref) {
-	    var onChange = _ref.onChange,
-	        errors = _ref.errors,
-	        referral = _ref.referral,
-	        onSubmit = _ref.onSubmit;
-
-	    return _react2.default.createElement(
-	        'form',
-	        { action: '/', onSubmit: onSubmit },
-	        _react2.default.createElement(
-	            'span',
-	            { style: { margin: '0 1vw 0 170px', fontSize: '14px' } },
-	            'SEND A REFERRAL:'
-	        ),
-	        _react2.default.createElement(_TextField2.default, {
-	            floatingLabelText: 'Email address',
-	            errorText: errors.message,
-	            onChange: onChange,
-	            value: referral
-	        }),
-	        _react2.default.createElement(
-	            'span',
-	            { className: 'button-line' },
-	            _react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Submit', primary: true })
-	        )
-	    );
-	};
-
-	exports.default = ReferralsForm;
-
-/***/ },
-/* 475 */
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43756,16 +42778,16 @@
 	});
 	exports.default = undefined;
 
-	var _AppBar = __webpack_require__(476);
+	var _RaisedButton = __webpack_require__(469);
 
-	var _AppBar2 = _interopRequireDefault(_AppBar);
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _AppBar2.default;
+	exports.default = _RaisedButton2.default;
 
 /***/ },
-/* 476 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43777,10 +42799,6 @@
 	var _extends2 = __webpack_require__(393);
 
 	var _extends3 = _interopRequireDefault(_extends2);
-
-	var _keys = __webpack_require__(309);
-
-	var _keys2 = _interopRequireDefault(_keys);
 
 	var _objectWithoutProperties2 = __webpack_require__(398);
 
@@ -43806,8 +42824,6 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	exports.getStyles = getStyles;
-
 	var _simpleAssign = __webpack_require__(399);
 
 	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
@@ -43816,379 +42832,443 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _IconButton = __webpack_require__(419);
+	var _transitions = __webpack_require__(403);
 
-	var _IconButton2 = _interopRequireDefault(_IconButton);
+	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _menu = __webpack_require__(477);
+	var _colorManipulator = __webpack_require__(241);
 
-	var _menu2 = _interopRequireDefault(_menu);
+	var _childUtils = __webpack_require__(422);
+
+	var _EnhancedButton = __webpack_require__(421);
+
+	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 
 	var _Paper = __webpack_require__(400);
 
 	var _Paper2 = _interopRequireDefault(_Paper);
 
-	var _propTypes = __webpack_require__(402);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _warning = __webpack_require__(306);
-
-	var _warning2 = _interopRequireDefault(_warning);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function getStyles(props, context) {
-	  var _context$muiTheme = context.muiTheme,
-	      appBar = _context$muiTheme.appBar,
-	      iconButtonSize = _context$muiTheme.button.iconButtonSize,
-	      zIndex = _context$muiTheme.zIndex;
-
-
-	  var flatButtonSize = 36;
-
-	  var styles = {
-	    root: {
-	      position: 'relative',
-	      zIndex: zIndex.appBar,
-	      width: '100%',
-	      display: 'flex',
-	      backgroundColor: appBar.color,
-	      paddingLeft: appBar.padding,
-	      paddingRight: appBar.padding
-	    },
-	    title: {
-	      whiteSpace: 'nowrap',
-	      overflow: 'hidden',
-	      textOverflow: 'ellipsis',
-	      margin: 0,
-	      paddingTop: 0,
-	      letterSpacing: 0,
-	      fontSize: 24,
-	      fontWeight: appBar.titleFontWeight,
-	      color: appBar.textColor,
-	      height: appBar.height,
-	      lineHeight: appBar.height + 'px'
-	    },
-	    mainElement: {
-	      boxFlex: 1,
-	      flex: '1'
-	    },
-	    iconButtonStyle: {
-	      marginTop: (appBar.height - iconButtonSize) / 2,
-	      marginRight: 8,
-	      marginLeft: -16
-	    },
-	    iconButtonIconStyle: {
-	      fill: appBar.textColor,
-	      color: appBar.textColor
-	    },
-	    flatButton: {
-	      color: appBar.textColor,
-	      marginTop: (iconButtonSize - flatButtonSize) / 2 + 1
+	function validateLabel(props, propName, componentName) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (!props.children && props.label !== 0 && !props.label && !props.icon) {
+	      return new Error('Required prop label or children or icon was not specified in ' + componentName + '.');
 	    }
-	  };
-
-	  return styles;
+	  }
 	}
 
-	var AppBar = function (_Component) {
-	  (0, _inherits3.default)(AppBar, _Component);
+	function getStyles(props, context, state) {
+	  var _context$muiTheme = context.muiTheme,
+	      baseTheme = _context$muiTheme.baseTheme,
+	      button = _context$muiTheme.button,
+	      raisedButton = _context$muiTheme.raisedButton;
+	  var disabled = props.disabled,
+	      disabledBackgroundColor = props.disabledBackgroundColor,
+	      disabledLabelColor = props.disabledLabelColor,
+	      fullWidth = props.fullWidth,
+	      icon = props.icon,
+	      label = props.label,
+	      labelPosition = props.labelPosition,
+	      primary = props.primary,
+	      secondary = props.secondary,
+	      style = props.style;
 
-	  function AppBar() {
+
+	  var amount = primary || secondary ? 0.4 : 0.08;
+
+	  var backgroundColor = raisedButton.color;
+	  var labelColor = raisedButton.textColor;
+
+	  if (disabled) {
+	    backgroundColor = disabledBackgroundColor || raisedButton.disabledColor;
+	    labelColor = disabledLabelColor || raisedButton.disabledTextColor;
+	  } else if (primary) {
+	    backgroundColor = raisedButton.primaryColor;
+	    labelColor = raisedButton.primaryTextColor;
+	  } else if (secondary) {
+	    backgroundColor = raisedButton.secondaryColor;
+	    labelColor = raisedButton.secondaryTextColor;
+	  } else {
+	    if (props.backgroundColor) {
+	      backgroundColor = props.backgroundColor;
+	    }
+	    if (props.labelColor) {
+	      labelColor = props.labelColor;
+	    }
+	  }
+
+	  var buttonHeight = style && style.height || button.height;
+	  var borderRadius = 2;
+
+	  return {
+	    root: {
+	      display: 'inline-block',
+	      transition: _transitions2.default.easeOut(),
+	      minWidth: fullWidth ? '100%' : button.minWidth
+	    },
+	    button: {
+	      position: 'relative',
+	      height: buttonHeight,
+	      lineHeight: buttonHeight + 'px',
+	      width: '100%',
+	      padding: 0,
+	      borderRadius: borderRadius,
+	      transition: _transitions2.default.easeOut(),
+	      backgroundColor: backgroundColor,
+	      // That's the default value for a button but not a link
+	      textAlign: 'center'
+	    },
+	    label: {
+	      position: 'relative',
+	      opacity: 1,
+	      fontSize: raisedButton.fontSize,
+	      letterSpacing: 0,
+	      textTransform: raisedButton.textTransform || button.textTransform || 'uppercase',
+	      fontWeight: raisedButton.fontWeight,
+	      margin: 0,
+	      userSelect: 'none',
+	      paddingLeft: icon && labelPosition !== 'before' ? 8 : baseTheme.spacing.desktopGutterLess,
+	      paddingRight: icon && labelPosition === 'before' ? 8 : baseTheme.spacing.desktopGutterLess,
+	      color: labelColor
+	    },
+	    icon: {
+	      verticalAlign: 'middle',
+	      marginLeft: label && labelPosition !== 'before' ? 12 : 0,
+	      marginRight: label && labelPosition === 'before' ? 12 : 0
+	    },
+	    overlay: {
+	      height: buttonHeight,
+	      borderRadius: borderRadius,
+	      backgroundColor: (state.keyboardFocused || state.hovered) && !disabled && (0, _colorManipulator.fade)(labelColor, amount),
+	      transition: _transitions2.default.easeOut(),
+	      top: 0
+	    },
+	    ripple: {
+	      color: labelColor,
+	      opacity: !(primary || secondary) ? 0.1 : 0.16
+	    }
+	  };
+	}
+
+	var RaisedButton = function (_Component) {
+	  (0, _inherits3.default)(RaisedButton, _Component);
+
+	  function RaisedButton() {
 	    var _ref;
 
 	    var _temp, _this, _ret;
 
-	    (0, _classCallCheck3.default)(this, AppBar);
+	    (0, _classCallCheck3.default)(this, RaisedButton);
 
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = AppBar.__proto__ || (0, _getPrototypeOf2.default)(AppBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleTouchTapLeftIconButton = function (event) {
-	      if (_this.props.onLeftIconButtonTouchTap) {
-	        _this.props.onLeftIconButtonTouchTap(event);
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = RaisedButton.__proto__ || (0, _getPrototypeOf2.default)(RaisedButton)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      hovered: false,
+	      keyboardFocused: false,
+	      touched: false,
+	      initialZDepth: 0,
+	      zDepth: 0
+	    }, _this.handleMouseDown = function (event) {
+	      // only listen to left clicks
+	      if (event.button === 0) {
+	        _this.setState({
+	          zDepth: _this.state.initialZDepth + 1
+	        });
 	      }
-	    }, _this.handleTouchTapRightIconButton = function (event) {
-	      if (_this.props.onRightIconButtonTouchTap) {
-	        _this.props.onRightIconButtonTouchTap(event);
+	      if (_this.props.onMouseDown) {
+	        _this.props.onMouseDown(event);
 	      }
-	    }, _this.handleTitleTouchTap = function (event) {
-	      if (_this.props.onTitleTouchTap) {
-	        _this.props.onTitleTouchTap(event);
+	    }, _this.handleMouseUp = function (event) {
+	      _this.setState({
+	        zDepth: _this.state.initialZDepth
+	      });
+	      if (_this.props.onMouseUp) {
+	        _this.props.onMouseUp(event);
 	      }
+	    }, _this.handleMouseLeave = function (event) {
+	      if (!_this.state.keyboardFocused) {
+	        _this.setState({
+	          zDepth: _this.state.initialZDepth,
+	          hovered: false
+	        });
+	      }
+	      if (_this.props.onMouseLeave) {
+	        _this.props.onMouseLeave(event);
+	      }
+	    }, _this.handleMouseEnter = function (event) {
+	      if (!_this.state.keyboardFocused && !_this.state.touched) {
+	        _this.setState({
+	          hovered: true
+	        });
+	      }
+	      if (_this.props.onMouseEnter) {
+	        _this.props.onMouseEnter(event);
+	      }
+	    }, _this.handleTouchStart = function (event) {
+	      _this.setState({
+	        touched: true,
+	        zDepth: _this.state.initialZDepth + 1
+	      });
+
+	      if (_this.props.onTouchStart) {
+	        _this.props.onTouchStart(event);
+	      }
+	    }, _this.handleTouchEnd = function (event) {
+	      _this.setState({
+	        touched: true,
+	        zDepth: _this.state.initialZDepth
+	      });
+
+	      if (_this.props.onTouchEnd) {
+	        _this.props.onTouchEnd(event);
+	      }
+	    }, _this.handleKeyboardFocus = function (event, keyboardFocused) {
+	      var zDepth = keyboardFocused && !_this.props.disabled ? _this.state.initialZDepth + 1 : _this.state.initialZDepth;
+
+	      _this.setState({
+	        zDepth: zDepth,
+	        keyboardFocused: keyboardFocused
+	      });
 	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
 	  }
 
-	  (0, _createClass3.default)(AppBar, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementLeft || !this.props.iconClassNameLeft, 'Material-UI: Properties iconElementLeft\n      and iconClassNameLeft cannot be simultaneously defined. Please use one or the other.') : void 0;
+	  (0, _createClass3.default)(RaisedButton, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var zDepth = this.props.disabled ? 0 : 1;
+	      this.setState({
+	        zDepth: zDepth,
+	        initialZDepth: zDepth
+	      });
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      var zDepth = nextProps.disabled ? 0 : 1;
+	      var nextState = {
+	        zDepth: zDepth,
+	        initialZDepth: zDepth
+	      };
 
-	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementRight || !this.props.iconClassNameRight, 'Material-UI: Properties iconElementRight\n      and iconClassNameRight cannot be simultaneously defined. Please use one or the other.') : void 0;
+	      if (nextProps.disabled) {
+	        nextState.hovered = false;
+	      }
+
+	      this.setState(nextState);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
-	          title = _props.title,
-	          titleStyle = _props.titleStyle,
-	          iconStyleLeft = _props.iconStyleLeft,
-	          iconStyleRight = _props.iconStyleRight,
-	          onTitleTouchTap = _props.onTitleTouchTap,
-	          showMenuIconButton = _props.showMenuIconButton,
-	          iconElementLeft = _props.iconElementLeft,
-	          iconElementRight = _props.iconElementRight,
-	          iconClassNameLeft = _props.iconClassNameLeft,
-	          iconClassNameRight = _props.iconClassNameRight,
-	          onLeftIconButtonTouchTap = _props.onLeftIconButtonTouchTap,
-	          onRightIconButtonTouchTap = _props.onRightIconButtonTouchTap,
-	          className = _props.className,
-	          style = _props.style,
-	          zDepth = _props.zDepth,
+	          backgroundColor = _props.backgroundColor,
+	          buttonStyle = _props.buttonStyle,
 	          children = _props.children,
-	          other = (0, _objectWithoutProperties3.default)(_props, ['title', 'titleStyle', 'iconStyleLeft', 'iconStyleRight', 'onTitleTouchTap', 'showMenuIconButton', 'iconElementLeft', 'iconElementRight', 'iconClassNameLeft', 'iconClassNameRight', 'onLeftIconButtonTouchTap', 'onRightIconButtonTouchTap', 'className', 'style', 'zDepth', 'children']);
+	          className = _props.className,
+	          disabled = _props.disabled,
+	          disabledBackgroundColor = _props.disabledBackgroundColor,
+	          disabledLabelColor = _props.disabledLabelColor,
+	          fullWidth = _props.fullWidth,
+	          icon = _props.icon,
+	          label = _props.label,
+	          labelColor = _props.labelColor,
+	          labelPosition = _props.labelPosition,
+	          labelStyle = _props.labelStyle,
+	          overlayStyle = _props.overlayStyle,
+	          primary = _props.primary,
+	          rippleStyle = _props.rippleStyle,
+	          secondary = _props.secondary,
+	          style = _props.style,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['backgroundColor', 'buttonStyle', 'children', 'className', 'disabled', 'disabledBackgroundColor', 'disabledLabelColor', 'fullWidth', 'icon', 'label', 'labelColor', 'labelPosition', 'labelStyle', 'overlayStyle', 'primary', 'rippleStyle', 'secondary', 'style']);
 	      var prepareStyles = this.context.muiTheme.prepareStyles;
 
-	      var styles = getStyles(this.props, this.context);
+	      var styles = getStyles(this.props, this.context, this.state);
+	      var mergedRippleStyles = (0, _simpleAssign2.default)({}, styles.ripple, rippleStyle);
 
-	      var menuElementLeft = void 0;
-	      var menuElementRight = void 0;
+	      var buttonEventHandlers = disabled ? {} : {
+	        onMouseDown: this.handleMouseDown,
+	        onMouseUp: this.handleMouseUp,
+	        onMouseLeave: this.handleMouseLeave,
+	        onMouseEnter: this.handleMouseEnter,
+	        onTouchStart: this.handleTouchStart,
+	        onTouchEnd: this.handleTouchEnd,
+	        onKeyboardFocus: this.handleKeyboardFocus
+	      };
 
-	      // If the title is a string, wrap in an h1 tag.
-	      // If not, wrap in a div tag.
-	      var titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
+	      var labelElement = label && _react2.default.createElement(
+	        'span',
+	        { style: prepareStyles((0, _simpleAssign2.default)(styles.label, labelStyle)) },
+	        label
+	      );
 
-	      var titleElement = _react2.default.createElement(titleComponent, {
-	        onTouchTap: this.handleTitleTouchTap,
-	        style: prepareStyles((0, _simpleAssign2.default)(styles.title, styles.mainElement, titleStyle))
-	      }, title);
+	      var iconCloned = icon && (0, _react.cloneElement)(icon, {
+	        color: icon.props.color || styles.label.color,
+	        style: (0, _simpleAssign2.default)(styles.icon, icon.props.style)
+	      });
 
-	      var iconLeftStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, iconStyleLeft);
+	      // Place label before or after children.
+	      var childrenFragment = labelPosition === 'before' ? {
+	        labelElement: labelElement,
+	        iconCloned: iconCloned,
+	        children: children
+	      } : {
+	        children: children,
+	        iconCloned: iconCloned,
+	        labelElement: labelElement
+	      };
 
-	      if (showMenuIconButton) {
-	        if (iconElementLeft) {
-	          var iconElementLeftProps = {};
-
-	          if (iconElementLeft.type.muiName === 'IconButton') {
-	            var iconElemLeftChildren = iconElementLeft.props.children;
-	            var iconButtonIconStyle = !(iconElemLeftChildren && iconElemLeftChildren.props && iconElemLeftChildren.props.color) ? styles.iconButtonIconStyle : null;
-
-	            iconElementLeftProps.iconStyle = (0, _simpleAssign2.default)({}, iconButtonIconStyle, iconElementLeft.props.iconStyle);
-	          }
-
-	          if (!iconElementLeft.props.onTouchTap && this.props.onLeftIconButtonTouchTap) {
-	            iconElementLeftProps.onTouchTap = this.handleTouchTapLeftIconButton;
-	          }
-
-	          menuElementLeft = _react2.default.createElement(
-	            'div',
-	            { style: prepareStyles(iconLeftStyle) },
-	            (0, _keys2.default)(iconElementLeftProps).length > 0 ? (0, _react.cloneElement)(iconElementLeft, iconElementLeftProps) : iconElementLeft
-	          );
-	        } else {
-	          menuElementLeft = _react2.default.createElement(
-	            _IconButton2.default,
-	            {
-	              style: iconLeftStyle,
-	              iconStyle: styles.iconButtonIconStyle,
-	              iconClassName: iconClassNameLeft,
-	              onTouchTap: this.handleTouchTapLeftIconButton
-	            },
-	            iconClassNameLeft ? '' : _react2.default.createElement(_menu2.default, { style: (0, _simpleAssign2.default)({}, styles.iconButtonIconStyle) })
-	          );
-	        }
-	      }
-
-	      var iconRightStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, {
-	        marginRight: -16,
-	        marginLeft: 'auto'
-	      }, iconStyleRight);
-
-	      if (iconElementRight) {
-	        var iconElementRightProps = {};
-
-	        switch (iconElementRight.type.muiName) {
-	          case 'IconMenu':
-	          case 'IconButton':
-	            var iconElemRightChildren = iconElementRight.props.children;
-	            var _iconButtonIconStyle = !(iconElemRightChildren && iconElemRightChildren.props && iconElemRightChildren.props.color) ? styles.iconButtonIconStyle : null;
-
-	            iconElementRightProps.iconStyle = (0, _simpleAssign2.default)({}, _iconButtonIconStyle, iconElementRight.props.iconStyle);
-	            break;
-
-	          case 'FlatButton':
-	            iconElementRightProps.style = (0, _simpleAssign2.default)({}, styles.flatButton, iconElementRight.props.style);
-	            break;
-
-	          default:
-	        }
-
-	        if (!iconElementRight.props.onTouchTap && this.props.onRightIconButtonTouchTap) {
-	          iconElementRightProps.onTouchTap = this.handleTouchTapRightIconButton;
-	        }
-
-	        menuElementRight = _react2.default.createElement(
-	          'div',
-	          { style: prepareStyles(iconRightStyle) },
-	          (0, _keys2.default)(iconElementRightProps).length > 0 ? (0, _react.cloneElement)(iconElementRight, iconElementRightProps) : iconElementRight
-	        );
-	      } else if (iconClassNameRight) {
-	        menuElementRight = _react2.default.createElement(_IconButton2.default, {
-	          style: iconRightStyle,
-	          iconStyle: styles.iconButtonIconStyle,
-	          iconClassName: iconClassNameRight,
-	          onTouchTap: this.handleTouchTapRightIconButton
-	        });
-	      }
+	      var enhancedButtonChildren = (0, _childUtils.createChildFragment)(childrenFragment);
 
 	      return _react2.default.createElement(
 	        _Paper2.default,
-	        (0, _extends3.default)({}, other, {
-	          rounded: false,
+	        {
 	          className: className,
-	          style: (0, _simpleAssign2.default)({}, styles.root, style),
-	          zDepth: zDepth
-	        }),
-	        menuElementLeft,
-	        titleElement,
-	        menuElementRight,
-	        children
+	          style: (0, _simpleAssign2.default)(styles.root, style),
+	          zDepth: this.state.zDepth
+	        },
+	        _react2.default.createElement(
+	          _EnhancedButton2.default,
+	          (0, _extends3.default)({}, other, buttonEventHandlers, {
+	            ref: 'container',
+	            disabled: disabled,
+	            style: (0, _simpleAssign2.default)(styles.button, buttonStyle),
+	            focusRippleColor: mergedRippleStyles.color,
+	            touchRippleColor: mergedRippleStyles.color,
+	            focusRippleOpacity: mergedRippleStyles.opacity,
+	            touchRippleOpacity: mergedRippleStyles.opacity
+	          }),
+	          _react2.default.createElement(
+	            'div',
+	            {
+	              ref: 'overlay',
+	              style: prepareStyles((0, _simpleAssign2.default)(styles.overlay, overlayStyle))
+	            },
+	            enhancedButtonChildren
+	          )
+	        )
 	      );
 	    }
 	  }]);
-	  return AppBar;
+	  return RaisedButton;
 	}(_react.Component);
 
-	AppBar.muiName = 'AppBar';
-	AppBar.defaultProps = {
-	  showMenuIconButton: true,
-	  title: '',
-	  zDepth: 1
+	RaisedButton.muiName = 'RaisedButton';
+	RaisedButton.defaultProps = {
+	  disabled: false,
+	  labelPosition: 'after',
+	  fullWidth: false,
+	  primary: false,
+	  secondary: false
 	};
-	AppBar.contextTypes = {
+	RaisedButton.contextTypes = {
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
-	process.env.NODE_ENV !== "production" ? AppBar.propTypes = {
+	process.env.NODE_ENV !== "production" ? RaisedButton.propTypes = {
 	  /**
-	   * Can be used to render a tab inside an app bar for instance.
+	   * Override the default background color for the button,
+	   * but not the default disabled background color
+	   * (use `disabledBackgroundColor` for this).
+	   */
+	  backgroundColor: _react.PropTypes.string,
+	  /**
+	   * Override the inline-styles of the button element.
+	   */
+	  buttonStyle: _react.PropTypes.object,
+	  /**
+	   * The content of the button.
+	   * If a label is provided via the `label` prop, the text within the label
+	   * will be displayed in addition to the content provided here.
 	   */
 	  children: _react.PropTypes.node,
 	  /**
-	   * Applied to the app bar's root element.
+	   * The CSS class name of the root element.
 	   */
 	  className: _react.PropTypes.string,
 	  /**
-	   * The classname of the icon on the left of the app bar.
-	   * If you are using a stylesheet for your icons, enter the class name for the icon to be used here.
+	   * If true, the button will be disabled.
 	   */
-	  iconClassNameLeft: _react.PropTypes.string,
+	  disabled: _react.PropTypes.bool,
 	  /**
-	   * Similiar to the iconClassNameLeft prop except that
-	   * it applies to the icon displayed on the right of the app bar.
+	   * Override the default background color for the button
+	   * when it is disabled.
 	   */
-	  iconClassNameRight: _react.PropTypes.string,
+	  disabledBackgroundColor: _react.PropTypes.string,
 	  /**
-	   * The custom element to be displayed on the left side of the
-	   * app bar such as an SvgIcon.
+	   * The color of the button's label when the button is disabled.
 	   */
-	  iconElementLeft: _react.PropTypes.element,
+	  disabledLabelColor: _react.PropTypes.string,
 	  /**
-	   * Similiar to the iconElementLeft prop except that this element is displayed on the right of the app bar.
+	   * If true, the button will take up the full width of its container.
 	   */
-	  iconElementRight: _react.PropTypes.element,
+	  fullWidth: _react.PropTypes.bool,
 	  /**
-	   * Override the inline-styles of the element displayed on the left side of the app bar.
+	   * The URL to link to when the button is clicked.
 	   */
-	  iconStyleLeft: _react.PropTypes.object,
+	  href: _react.PropTypes.string,
 	  /**
-	   * Override the inline-styles of the element displayed on the right side of the app bar.
+	   * An icon to be displayed within the button.
 	   */
-	  iconStyleRight: _react.PropTypes.object,
+	  icon: _react.PropTypes.node,
 	  /**
-	   * Callback function for when the left icon is selected via a touch tap.
-	   *
-	   * @param {object} event TouchTap event targeting the left `IconButton`.
+	   * The label to be displayed within the button.
+	   * If content is provided via the `children` prop, that content will be
+	   * displayed in addition to the label provided here.
 	   */
-	  onLeftIconButtonTouchTap: _react.PropTypes.func,
+	  label: validateLabel,
 	  /**
-	   * Callback function for when the right icon is selected via a touch tap.
-	   *
-	   * @param {object} event TouchTap event targeting the right `IconButton`.
+	   * The color of the button's label.
 	   */
-	  onRightIconButtonTouchTap: _react.PropTypes.func,
+	  labelColor: _react.PropTypes.string,
 	  /**
-	   * Callback function for when the title text is selected via a touch tap.
-	   *
-	   * @param {object} event TouchTap event targeting the `title` node.
+	   * The position of the button's label relative to the button's `children`.
 	   */
-	  onTitleTouchTap: _react.PropTypes.func,
+	  labelPosition: _react.PropTypes.oneOf(['before', 'after']),
 	  /**
-	   * Determines whether or not to display the Menu icon next to the title.
-	   * Setting this prop to false will hide the icon.
+	   * Override the inline-styles of the button's label element.
 	   */
-	  showMenuIconButton: _react.PropTypes.bool,
+	  labelStyle: _react.PropTypes.object,
+	  /** @ignore */
+	  onMouseDown: _react.PropTypes.func,
+	  /** @ignore */
+	  onMouseEnter: _react.PropTypes.func,
+	  /** @ignore */
+	  onMouseLeave: _react.PropTypes.func,
+	  /** @ignore */
+	  onMouseUp: _react.PropTypes.func,
+	  /** @ignore */
+	  onTouchEnd: _react.PropTypes.func,
+	  /** @ignore */
+	  onTouchStart: _react.PropTypes.func,
+	  /**
+	   * Override the inline style of the button overlay.
+	   */
+	  overlayStyle: _react.PropTypes.object,
+	  /**
+	   * If true, the button will use the theme's primary color.
+	   */
+	  primary: _react.PropTypes.bool,
+	  /**
+	   * Override the inline style of the ripple element.
+	   */
+	  rippleStyle: _react.PropTypes.object,
+	  /**
+	   * If true, the button will use the theme's secondary color.
+	   * If both `secondary` and `primary` are true, the button will use
+	   * the theme's primary color.
+	   */
+	  secondary: _react.PropTypes.bool,
 	  /**
 	   * Override the inline-styles of the root element.
 	   */
-	  style: _react.PropTypes.object,
-	  /**
-	   * The title to display on the app bar.
-	   */
-	  title: _react.PropTypes.node,
-	  /**
-	   * Override the inline-styles of the app bar's title element.
-	   */
-	  titleStyle: _react.PropTypes.object,
-	  /**
-	   * The zDepth of the component.
-	   * The shadow of the app bar is also dependent on this property.
-	   */
-	  zDepth: _propTypes2.default.zDepth
+	  style: _react.PropTypes.object
 	} : void 0;
-	exports.default = AppBar;
+	exports.default = RaisedButton;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 477 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _pure = __webpack_require__(406);
-
-	var _pure2 = _interopRequireDefault(_pure);
-
-	var _SvgIcon = __webpack_require__(416);
-
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NavigationMenu = function NavigationMenu(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' })
-	  );
-	};
-	NavigationMenu = (0, _pure2.default)(NavigationMenu);
-	NavigationMenu.displayName = 'NavigationMenu';
-	NavigationMenu.muiName = 'SvgIcon';
-
-	exports.default = NavigationMenu;
-
-/***/ },
-/* 478 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44201,15 +43281,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _List = __webpack_require__(479);
+	var _List = __webpack_require__(471);
 
 	var _List2 = _interopRequireDefault(_List);
 
-	var _Subheader = __webpack_require__(481);
+	var _Subheader = __webpack_require__(473);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
-	var _people = __webpack_require__(491);
+	var _people = __webpack_require__(480);
 
 	var _people2 = _interopRequireDefault(_people);
 
@@ -44248,7 +43328,7 @@
 	exports.default = ReferralList;
 
 /***/ },
-/* 479 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44258,15 +43338,15 @@
 	});
 	exports.default = exports.makeSelectable = exports.ListItem = exports.List = undefined;
 
-	var _List2 = __webpack_require__(480);
+	var _List2 = __webpack_require__(472);
 
 	var _List3 = _interopRequireDefault(_List2);
 
-	var _ListItem2 = __webpack_require__(483);
+	var _ListItem2 = __webpack_require__(475);
 
 	var _ListItem3 = _interopRequireDefault(_ListItem2);
 
-	var _makeSelectable2 = __webpack_require__(487);
+	var _makeSelectable2 = __webpack_require__(479);
 
 	var _makeSelectable3 = _interopRequireDefault(_makeSelectable2);
 
@@ -44278,7 +43358,7 @@
 	exports.default = _List3.default;
 
 /***/ },
-/* 480 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44323,7 +43403,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Subheader = __webpack_require__(481);
+	var _Subheader = __webpack_require__(473);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
@@ -44388,7 +43468,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 481 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44398,7 +43478,7 @@
 	});
 	exports.default = undefined;
 
-	var _Subheader = __webpack_require__(482);
+	var _Subheader = __webpack_require__(474);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
@@ -44407,7 +43487,7 @@
 	exports.default = _Subheader2.default;
 
 /***/ },
-/* 482 */
+/* 474 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44492,7 +43572,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 483 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44559,15 +43639,15 @@
 
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 
-	var _expandLess = __webpack_require__(484);
+	var _expandLess = __webpack_require__(476);
 
 	var _expandLess2 = _interopRequireDefault(_expandLess);
 
-	var _expandMore = __webpack_require__(485);
+	var _expandMore = __webpack_require__(477);
 
 	var _expandMore2 = _interopRequireDefault(_expandMore);
 
-	var _NestedList = __webpack_require__(486);
+	var _NestedList = __webpack_require__(478);
 
 	var _NestedList2 = _interopRequireDefault(_NestedList);
 
@@ -45209,7 +44289,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 484 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45246,7 +44326,7 @@
 	exports.default = NavigationExpandLess;
 
 /***/ },
-/* 485 */
+/* 477 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45283,7 +44363,7 @@
 	exports.default = NavigationExpandMore;
 
 /***/ },
-/* 486 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -45296,7 +44376,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _List = __webpack_require__(480);
+	var _List = __webpack_require__(472);
 
 	var _List2 = _interopRequireDefault(_List);
 
@@ -45338,7 +44418,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 487 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45510,8 +44590,963 @@
 	exports.default = makeSelectable;
 
 /***/ },
-/* 488 */,
-/* 489 */
+/* 480 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(406);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(416);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SocialPeople = function SocialPeople(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' })
+	  );
+	};
+	SocialPeople = (0, _pure2.default)(SocialPeople);
+	SocialPeople.displayName = 'SocialPeople';
+	SocialPeople.muiName = 'SvgIcon';
+
+	exports.default = SocialPeople;
+
+/***/ },
+/* 481 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _AppBar = __webpack_require__(482);
+
+	var _AppBar2 = _interopRequireDefault(_AppBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _AppBar2.default;
+
+/***/ },
+/* 482 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends2 = __webpack_require__(393);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
+	var _keys = __webpack_require__(309);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	var _objectWithoutProperties2 = __webpack_require__(398);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _getPrototypeOf = __webpack_require__(317);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(315);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(320);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(324);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(325);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	exports.getStyles = getStyles;
+
+	var _simpleAssign = __webpack_require__(399);
+
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _IconButton = __webpack_require__(419);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	var _menu = __webpack_require__(483);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	var _Paper = __webpack_require__(400);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
+	var _propTypes = __webpack_require__(402);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _warning = __webpack_require__(306);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getStyles(props, context) {
+	  var _context$muiTheme = context.muiTheme,
+	      appBar = _context$muiTheme.appBar,
+	      iconButtonSize = _context$muiTheme.button.iconButtonSize,
+	      zIndex = _context$muiTheme.zIndex;
+
+
+	  var flatButtonSize = 36;
+
+	  var styles = {
+	    root: {
+	      position: 'relative',
+	      zIndex: zIndex.appBar,
+	      width: '100%',
+	      display: 'flex',
+	      backgroundColor: appBar.color,
+	      paddingLeft: appBar.padding,
+	      paddingRight: appBar.padding
+	    },
+	    title: {
+	      whiteSpace: 'nowrap',
+	      overflow: 'hidden',
+	      textOverflow: 'ellipsis',
+	      margin: 0,
+	      paddingTop: 0,
+	      letterSpacing: 0,
+	      fontSize: 24,
+	      fontWeight: appBar.titleFontWeight,
+	      color: appBar.textColor,
+	      height: appBar.height,
+	      lineHeight: appBar.height + 'px'
+	    },
+	    mainElement: {
+	      boxFlex: 1,
+	      flex: '1'
+	    },
+	    iconButtonStyle: {
+	      marginTop: (appBar.height - iconButtonSize) / 2,
+	      marginRight: 8,
+	      marginLeft: -16
+	    },
+	    iconButtonIconStyle: {
+	      fill: appBar.textColor,
+	      color: appBar.textColor
+	    },
+	    flatButton: {
+	      color: appBar.textColor,
+	      marginTop: (iconButtonSize - flatButtonSize) / 2 + 1
+	    }
+	  };
+
+	  return styles;
+	}
+
+	var AppBar = function (_Component) {
+	  (0, _inherits3.default)(AppBar, _Component);
+
+	  function AppBar() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    (0, _classCallCheck3.default)(this, AppBar);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = AppBar.__proto__ || (0, _getPrototypeOf2.default)(AppBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleTouchTapLeftIconButton = function (event) {
+	      if (_this.props.onLeftIconButtonTouchTap) {
+	        _this.props.onLeftIconButtonTouchTap(event);
+	      }
+	    }, _this.handleTouchTapRightIconButton = function (event) {
+	      if (_this.props.onRightIconButtonTouchTap) {
+	        _this.props.onRightIconButtonTouchTap(event);
+	      }
+	    }, _this.handleTitleTouchTap = function (event) {
+	      if (_this.props.onTitleTouchTap) {
+	        _this.props.onTitleTouchTap(event);
+	      }
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+
+	  (0, _createClass3.default)(AppBar, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementLeft || !this.props.iconClassNameLeft, 'Material-UI: Properties iconElementLeft\n      and iconClassNameLeft cannot be simultaneously defined. Please use one or the other.') : void 0;
+
+	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconElementRight || !this.props.iconClassNameRight, 'Material-UI: Properties iconElementRight\n      and iconClassNameRight cannot be simultaneously defined. Please use one or the other.') : void 0;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          title = _props.title,
+	          titleStyle = _props.titleStyle,
+	          iconStyleLeft = _props.iconStyleLeft,
+	          iconStyleRight = _props.iconStyleRight,
+	          onTitleTouchTap = _props.onTitleTouchTap,
+	          showMenuIconButton = _props.showMenuIconButton,
+	          iconElementLeft = _props.iconElementLeft,
+	          iconElementRight = _props.iconElementRight,
+	          iconClassNameLeft = _props.iconClassNameLeft,
+	          iconClassNameRight = _props.iconClassNameRight,
+	          onLeftIconButtonTouchTap = _props.onLeftIconButtonTouchTap,
+	          onRightIconButtonTouchTap = _props.onRightIconButtonTouchTap,
+	          className = _props.className,
+	          style = _props.style,
+	          zDepth = _props.zDepth,
+	          children = _props.children,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['title', 'titleStyle', 'iconStyleLeft', 'iconStyleRight', 'onTitleTouchTap', 'showMenuIconButton', 'iconElementLeft', 'iconElementRight', 'iconClassNameLeft', 'iconClassNameRight', 'onLeftIconButtonTouchTap', 'onRightIconButtonTouchTap', 'className', 'style', 'zDepth', 'children']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+
+	      var styles = getStyles(this.props, this.context);
+
+	      var menuElementLeft = void 0;
+	      var menuElementRight = void 0;
+
+	      // If the title is a string, wrap in an h1 tag.
+	      // If not, wrap in a div tag.
+	      var titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
+
+	      var titleElement = _react2.default.createElement(titleComponent, {
+	        onTouchTap: this.handleTitleTouchTap,
+	        style: prepareStyles((0, _simpleAssign2.default)(styles.title, styles.mainElement, titleStyle))
+	      }, title);
+
+	      var iconLeftStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, iconStyleLeft);
+
+	      if (showMenuIconButton) {
+	        if (iconElementLeft) {
+	          var iconElementLeftProps = {};
+
+	          if (iconElementLeft.type.muiName === 'IconButton') {
+	            var iconElemLeftChildren = iconElementLeft.props.children;
+	            var iconButtonIconStyle = !(iconElemLeftChildren && iconElemLeftChildren.props && iconElemLeftChildren.props.color) ? styles.iconButtonIconStyle : null;
+
+	            iconElementLeftProps.iconStyle = (0, _simpleAssign2.default)({}, iconButtonIconStyle, iconElementLeft.props.iconStyle);
+	          }
+
+	          if (!iconElementLeft.props.onTouchTap && this.props.onLeftIconButtonTouchTap) {
+	            iconElementLeftProps.onTouchTap = this.handleTouchTapLeftIconButton;
+	          }
+
+	          menuElementLeft = _react2.default.createElement(
+	            'div',
+	            { style: prepareStyles(iconLeftStyle) },
+	            (0, _keys2.default)(iconElementLeftProps).length > 0 ? (0, _react.cloneElement)(iconElementLeft, iconElementLeftProps) : iconElementLeft
+	          );
+	        } else {
+	          menuElementLeft = _react2.default.createElement(
+	            _IconButton2.default,
+	            {
+	              style: iconLeftStyle,
+	              iconStyle: styles.iconButtonIconStyle,
+	              iconClassName: iconClassNameLeft,
+	              onTouchTap: this.handleTouchTapLeftIconButton
+	            },
+	            iconClassNameLeft ? '' : _react2.default.createElement(_menu2.default, { style: (0, _simpleAssign2.default)({}, styles.iconButtonIconStyle) })
+	          );
+	        }
+	      }
+
+	      var iconRightStyle = (0, _simpleAssign2.default)({}, styles.iconButtonStyle, {
+	        marginRight: -16,
+	        marginLeft: 'auto'
+	      }, iconStyleRight);
+
+	      if (iconElementRight) {
+	        var iconElementRightProps = {};
+
+	        switch (iconElementRight.type.muiName) {
+	          case 'IconMenu':
+	          case 'IconButton':
+	            var iconElemRightChildren = iconElementRight.props.children;
+	            var _iconButtonIconStyle = !(iconElemRightChildren && iconElemRightChildren.props && iconElemRightChildren.props.color) ? styles.iconButtonIconStyle : null;
+
+	            iconElementRightProps.iconStyle = (0, _simpleAssign2.default)({}, _iconButtonIconStyle, iconElementRight.props.iconStyle);
+	            break;
+
+	          case 'FlatButton':
+	            iconElementRightProps.style = (0, _simpleAssign2.default)({}, styles.flatButton, iconElementRight.props.style);
+	            break;
+
+	          default:
+	        }
+
+	        if (!iconElementRight.props.onTouchTap && this.props.onRightIconButtonTouchTap) {
+	          iconElementRightProps.onTouchTap = this.handleTouchTapRightIconButton;
+	        }
+
+	        menuElementRight = _react2.default.createElement(
+	          'div',
+	          { style: prepareStyles(iconRightStyle) },
+	          (0, _keys2.default)(iconElementRightProps).length > 0 ? (0, _react.cloneElement)(iconElementRight, iconElementRightProps) : iconElementRight
+	        );
+	      } else if (iconClassNameRight) {
+	        menuElementRight = _react2.default.createElement(_IconButton2.default, {
+	          style: iconRightStyle,
+	          iconStyle: styles.iconButtonIconStyle,
+	          iconClassName: iconClassNameRight,
+	          onTouchTap: this.handleTouchTapRightIconButton
+	        });
+	      }
+
+	      return _react2.default.createElement(
+	        _Paper2.default,
+	        (0, _extends3.default)({}, other, {
+	          rounded: false,
+	          className: className,
+	          style: (0, _simpleAssign2.default)({}, styles.root, style),
+	          zDepth: zDepth
+	        }),
+	        menuElementLeft,
+	        titleElement,
+	        menuElementRight,
+	        children
+	      );
+	    }
+	  }]);
+	  return AppBar;
+	}(_react.Component);
+
+	AppBar.muiName = 'AppBar';
+	AppBar.defaultProps = {
+	  showMenuIconButton: true,
+	  title: '',
+	  zDepth: 1
+	};
+	AppBar.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? AppBar.propTypes = {
+	  /**
+	   * Can be used to render a tab inside an app bar for instance.
+	   */
+	  children: _react.PropTypes.node,
+	  /**
+	   * Applied to the app bar's root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * The classname of the icon on the left of the app bar.
+	   * If you are using a stylesheet for your icons, enter the class name for the icon to be used here.
+	   */
+	  iconClassNameLeft: _react.PropTypes.string,
+	  /**
+	   * Similiar to the iconClassNameLeft prop except that
+	   * it applies to the icon displayed on the right of the app bar.
+	   */
+	  iconClassNameRight: _react.PropTypes.string,
+	  /**
+	   * The custom element to be displayed on the left side of the
+	   * app bar such as an SvgIcon.
+	   */
+	  iconElementLeft: _react.PropTypes.element,
+	  /**
+	   * Similiar to the iconElementLeft prop except that this element is displayed on the right of the app bar.
+	   */
+	  iconElementRight: _react.PropTypes.element,
+	  /**
+	   * Override the inline-styles of the element displayed on the left side of the app bar.
+	   */
+	  iconStyleLeft: _react.PropTypes.object,
+	  /**
+	   * Override the inline-styles of the element displayed on the right side of the app bar.
+	   */
+	  iconStyleRight: _react.PropTypes.object,
+	  /**
+	   * Callback function for when the left icon is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the left `IconButton`.
+	   */
+	  onLeftIconButtonTouchTap: _react.PropTypes.func,
+	  /**
+	   * Callback function for when the right icon is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the right `IconButton`.
+	   */
+	  onRightIconButtonTouchTap: _react.PropTypes.func,
+	  /**
+	   * Callback function for when the title text is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the `title` node.
+	   */
+	  onTitleTouchTap: _react.PropTypes.func,
+	  /**
+	   * Determines whether or not to display the Menu icon next to the title.
+	   * Setting this prop to false will hide the icon.
+	   */
+	  showMenuIconButton: _react.PropTypes.bool,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * The title to display on the app bar.
+	   */
+	  title: _react.PropTypes.node,
+	  /**
+	   * Override the inline-styles of the app bar's title element.
+	   */
+	  titleStyle: _react.PropTypes.object,
+	  /**
+	   * The zDepth of the component.
+	   * The shadow of the app bar is also dependent on this property.
+	   */
+	  zDepth: _propTypes2.default.zDepth
+	} : void 0;
+	exports.default = AppBar;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 483 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(406);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(416);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NavigationMenu = function NavigationMenu(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' })
+	  );
+	};
+	NavigationMenu = (0, _pure2.default)(NavigationMenu);
+	NavigationMenu.displayName = 'NavigationMenu';
+	NavigationMenu.muiName = 'SvgIcon';
+
+	exports.default = NavigationMenu;
+
+/***/ },
+/* 484 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LoginForm = __webpack_require__(485);
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	var _Auth = __webpack_require__(389);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LoginPage = function (_React$Component) {
+	  _inherits(LoginPage, _React$Component);
+
+	  function LoginPage(props, context) {
+	    _classCallCheck(this, LoginPage);
+
+	    var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props, context));
+
+	    var storedMessage = localStorage.getItem('successMessage');
+	    var successMessage = '';
+
+	    if (storedMessage) {
+	      successMessage = storedMessage;
+	      localStorage.removeItem('successMessage');
+	    }
+
+	    _this.state = {
+	      errors: {},
+	      successMessage: successMessage,
+	      user: {
+	        email: '',
+	        password: ''
+	      }
+	    };
+
+	    _this.processForm = _this.processForm.bind(_this);
+	    _this.changeUser = _this.changeUser.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(LoginPage, [{
+	    key: 'processForm',
+	    value: function processForm(event) {
+	      var _this2 = this;
+
+	      event.preventDefault();
+
+	      var email = encodeURIComponent(this.state.user.email);
+	      var password = encodeURIComponent(this.state.user.password);
+	      var formData = 'email=' + email + '&password=' + password;
+	      var xhr = new XMLHttpRequest();
+	      xhr.open('post', '/auth/login');
+	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	      xhr.responseType = 'json';
+	      xhr.addEventListener('load', function () {
+	        if (xhr.status === 200) {
+	          //SUCCESS
+
+	          //change the component-container state
+	          _this2.setState({
+	            errors: {}
+	          });
+
+	          //save the token
+	          _Auth2.default.authenticateUser(xhr.response.token);
+
+	          //change the current url to /
+	          _this2.context.router.replace('/');
+	        } else {
+	          //FAILURE
+	          var errors = xhr.response.errors ? xhr.response.errors : {};
+	          errors.summary = xhr.response.message;
+	          _this2.setState({
+	            errors: errors
+	          });
+	        }
+	      });
+	      xhr.send(formData);
+	    }
+	  }, {
+	    key: 'changeUser',
+	    value: function changeUser(event) {
+	      var field = event.target.name;
+	      var user = this.state.user;
+	      user[field] = event.target.value;
+
+	      this.setState({
+	        user: user
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(_LoginForm2.default, {
+	        onSubmit: this.processForm,
+	        onChange: this.changeUser,
+	        errors: this.state.errors,
+	        successMessage: this.state.successMessage,
+	        user: this.state.user
+	      });
+	    }
+	  }]);
+
+	  return LoginPage;
+	}(_react2.default.Component);
+
+	LoginPage.contextTypes = {
+	  router: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = LoginPage;
+
+/***/ },
+/* 485 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(333);
+
+	var _Card = __webpack_require__(391);
+
+	var _RaisedButton = __webpack_require__(468);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _TextField = __webpack_require__(457);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LoginForm = function LoginForm(_ref) {
+	  var onSubmit = _ref.onSubmit,
+	      onChange = _ref.onChange,
+	      successMessage = _ref.successMessage,
+	      errors = _ref.errors,
+	      user = _ref.user;
+	  return _react2.default.createElement(
+	    _Card.Card,
+	    { className: 'container' },
+	    _react2.default.createElement(
+	      'form',
+	      { action: '/', onSubmit: onSubmit },
+	      _react2.default.createElement(
+	        'h2',
+	        { className: 'card-heading' },
+	        'Login'
+	      ),
+	      successMessage && _react2.default.createElement(
+	        'p',
+	        { className: 'success-message' },
+	        successMessage
+	      ),
+	      errors.summary && _react2.default.createElement(
+	        'p',
+	        { className: 'error-message' },
+	        errors.summary
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'field-line' },
+	        _react2.default.createElement(_TextField2.default, {
+	          floatingLabelText: 'Email',
+	          name: 'email',
+	          errorText: errors.email,
+	          onChange: onChange,
+	          value: user.email
+	        })
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'field-line' },
+	        _react2.default.createElement(_TextField2.default, {
+	          floatingLabelText: 'Password',
+	          type: 'password',
+	          name: 'password',
+	          onChange: onChange,
+	          errorText: errors.password,
+	          value: user.password
+	        })
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'button-line' },
+	        _react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Log in', primary: true })
+	      ),
+	      _react2.default.createElement(
+	        _Card.CardText,
+	        null,
+	        'Don\'t have an account? ',
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/signup' },
+	          'Create one'
+	        ),
+	        '.'
+	      )
+	    )
+	  );
+	};
+
+	LoginForm.propTypes = {
+	  onSubmit: _react.PropTypes.func.isRequired,
+	  onChange: _react.PropTypes.func.isRequired,
+	  errors: _react.PropTypes.object.isRequired,
+	  user: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = LoginForm;
+
+/***/ },
+/* 486 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SignUpForm = __webpack_require__(487);
+
+	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SignUpPage = function (_React$Component) {
+		_inherits(SignUpPage, _React$Component);
+
+		function SignUpPage(props, context) {
+			_classCallCheck(this, SignUpPage);
+
+			var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props, context));
+
+			_this.state = {
+				errors: {},
+				user: {
+					email: '',
+					name: '',
+					password: ''
+				}
+			};
+
+			_this.processForm = _this.processForm.bind(_this);
+			_this.changeUser = _this.changeUser.bind(_this);
+			return _this;
+		}
+
+		_createClass(SignUpPage, [{
+			key: 'changeUser',
+			value: function changeUser(event) {
+				console.log(this.context);
+				var field = event.target.name;
+				var user = this.state.user;
+				user[field] = event.target.value;
+				this.setState({
+					user: user
+				});
+			}
+		}, {
+			key: 'processForm',
+			value: function processForm(event) {
+				var _this2 = this;
+
+				event.preventDefault();
+
+				var name = encodeURIComponent(this.state.user.name);
+				var email = encodeURIComponent(this.state.user.email);
+				var password = encodeURIComponent(this.state.user.password);
+				var formData = 'name=' + name + '&email=' + email + '&password=' + password;
+
+				var xhr = new XMLHttpRequest();
+				xhr.open('post', '/auth/signup');
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.responseType = 'json';
+				xhr.addEventListener('load', function () {
+					if (xhr.status === 200) {
+						//success
+						console.log('post request succeded');
+						//change the component-container state
+						_this2.setState({
+							errors: {}
+						});
+
+						localStorage.setItem('successMessage', xhr.response.message);
+
+						_this2.context.router.replace('/login');
+					} else {
+						//failure
+						console.log('post request failed with this error: ', xhr.response.message);
+
+						var errors = xhr.response.errors ? xhr.response.errors : {};
+
+						errors.summary = xhr.response.message;
+						_this2.setState({
+							errors: errors
+						});
+					}
+				});
+
+				xhr.send(formData);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(_SignUpForm2.default, {
+					onSubmit: this.processForm,
+					onChange: this.changeUser,
+					errors: this.state.errors,
+					user: this.state.user
+				});
+			}
+		}]);
+
+		return SignUpPage;
+	}(_react2.default.Component);
+
+	SignUpPage.contextTypes = {
+		router: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = SignUpPage;
+
+/***/ },
+/* 487 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(333);
+
+	var _Card = __webpack_require__(391);
+
+	var _RaisedButton = __webpack_require__(468);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _TextField = __webpack_require__(457);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SignUpForm = function SignUpForm(_ref) {
+		var onSubmit = _ref.onSubmit,
+		    onChange = _ref.onChange,
+		    errors = _ref.errors,
+		    user = _ref.user;
+		return _react2.default.createElement(
+			_Card.Card,
+			{ className: 'container' },
+			_react2.default.createElement(
+				'form',
+				{ action: '/', onSubmit: onSubmit },
+				_react2.default.createElement(
+					'h2',
+					{ className: 'card-heading' },
+					'Sign Up'
+				),
+				errors.summary && _react2.default.createElement(
+					'p',
+					{ className: 'error-message' },
+					errors.sumamry
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'field-line' },
+					_react2.default.createElement(_TextField2.default, {
+						floatingLabelText: 'Name',
+						name: 'name',
+						errorText: errors.name,
+						onChange: onChange,
+						value: user.name
+					})
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'field-line' },
+					_react2.default.createElement(_TextField2.default, {
+						floatingLabelText: 'Email',
+						name: 'email',
+						errorText: errors.email,
+						onChange: onChange,
+						value: user.email
+					})
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'field-line' },
+					_react2.default.createElement(_TextField2.default, {
+						floatingLabelText: 'Password',
+						type: 'password',
+						name: 'password',
+						errorText: errors.password,
+						onChange: onChange,
+						value: user.password
+					})
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'button-line' },
+					_react2.default.createElement(_RaisedButton2.default, { type: 'submit', label: 'Create New Account', primary: true })
+				),
+				_react2.default.createElement(
+					_Card.CardText,
+					null,
+					'Already have an account? ',
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/' },
+						' Log in'
+					)
+				)
+			)
+		);
+	};
+
+	SignUpForm.propTypes = {
+		onSubmit: _react.PropTypes.func.isRequired,
+		onChange: _react.PropTypes.func.isRequired,
+		errors: _react.PropTypes.object.isRequired,
+		user: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = SignUpForm;
+
+/***/ },
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45526,7 +45561,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Board = __webpack_require__(490);
+	var _Board = __webpack_require__(489);
 
 	var _Board2 = _interopRequireDefault(_Board);
 
@@ -45592,7 +45627,7 @@
 	exports.default = BoardPage;
 
 /***/ },
-/* 490 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45605,11 +45640,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _List = __webpack_require__(479);
+	var _List = __webpack_require__(471);
 
 	var _List2 = _interopRequireDefault(_List);
 
-	var _Subheader = __webpack_require__(481);
+	var _Subheader = __webpack_require__(473);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
@@ -45651,43 +45686,6 @@
 	};
 
 	exports.default = Board;
-
-/***/ },
-/* 491 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _pure = __webpack_require__(406);
-
-	var _pure2 = _interopRequireDefault(_pure);
-
-	var _SvgIcon = __webpack_require__(416);
-
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SocialPeople = function SocialPeople(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' })
-	  );
-	};
-	SocialPeople = (0, _pure2.default)(SocialPeople);
-	SocialPeople.displayName = 'SocialPeople';
-	SocialPeople.muiName = 'SvgIcon';
-
-	exports.default = SocialPeople;
 
 /***/ }
 /******/ ]);

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto'); 
 
 const UserSchema = new mongoose.Schema({
 	email: {
@@ -8,36 +9,41 @@ const UserSchema = new mongoose.Schema({
 	},
 	password: String,
 	name: String,
+	salt: String,
 	referrals: {
 		type: [{type: mongoose.Schema.ObjectId, ref: 'Referral'}],
 		default:[]
 	}
 });
 
-//method to compare the password in the request with the one in the db
-UserSchema.methods.comparePassword = function(password, callback) {
-	bcrypt.compare(password, this.password, callback);
+var generateSalt = function () {
+    return crypto.randomBytes(16).toString('base64');
 };
 
-//pre-save hook method
+var encryptPassword = function (plainText, salt) {
+    var hash = crypto.createHash('sha1');
+    hash.update(plainText);
+    hash.update(salt);
+    return hash.digest('hex');
+};
 
-UserSchema.pre('save', function saveHook(next) {
-	const user = this;
+UserSchema.pre('save', function (next) {
 
-	if(!user.isModified('password')) return next();
+    if (this.isModified('password')) {
+        this.salt = this.constructor.generateSalt();
+        this.password = this.constructor.encryptPassword(this.password, this.salt);
+    }
 
-	return bcrypt.genSalt((saltError, salt) => {
-		if(saltError) { return next(saltError); }
+    next();
 
-		return bcrypt.hash(user.password, salt, (hashError, hash) => {
-			if(hashError) { return next(hashError); }
+});
 
-			//replace the password string with hash value
-			user.password = hash;
+UserSchema.statics.generateSalt = generateSalt;
+UserSchema.statics.encryptPassword = encryptPassword;
 
-			return next();
-		})
-	})
-})
+UserSchema.methods.comparePassword = function(candidatePassword, callback) {
+	const isMatch = encryptPassword(candidatePassword, this.salt) === this.password;
+	return callback(null, isMatch);
+}
 
 module.exports = mongoose.model('User', UserSchema);
